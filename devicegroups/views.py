@@ -15,6 +15,7 @@ class DevicegroupList(PaginationMixin, ListView):
     context_object_name = 'devicegroup_list'
 
     def get_queryset(self):
+        '''method to query all devicegroups and filter it by department or other filter'''
         devicegroups = Devicegroup.objects.all()
         self.filterstring = self.kwargs.pop("filter", None)
         if self.filterstring == "None":
@@ -25,7 +26,7 @@ class DevicegroupList(PaginationMixin, ListView):
         if self.viewsorting in [s[0] for s in VIEWSORTING]:
             devicegroups = devicegroups.order_by(self.viewsorting)
 
-
+        # filtering by department
         if self.request.user.departments.count() > 0:
             self.departmentfilter = self.kwargs.get("department", "my")
         else:
