@@ -18,10 +18,14 @@ class DevicegroupList(PaginationMixin, ListView):
         '''method to query all devicegroups and filter it by department or other filter'''
         devicegroups = Devicegroup.objects.all()
         self.filterstring = self.kwargs.pop("filter", None)
+
+        # if there is a filterstring, select the matching results
         if self.filterstring == "None":
             self.filterstring = None
         if self.filterstring:
             devicegroups = devicegroups.filter(name__icontains=self.filterstring)
+
+        # sort list of devices by given viewsorting-parameter
         self.viewsorting = self.kwargs.pop("sorting", "name")
         if self.viewsorting in [s[0] for s in VIEWSORTING]:
             devicegroups = devicegroups.order_by(self.viewsorting)
@@ -38,28 +42,34 @@ class DevicegroupList(PaginationMixin, ListView):
                 self.departmentfilter = Department.objects.get(id=departmentid)
             except:
                 self.departmentfilter = Department.objects.get(name=self.departmentfilter)
+
             devicegroups = devicegroups.filter(Q(department=self.departmentfilter) | Q(department=None))
             self.departmentfilter = self.departmentfilter.id
 
         elif self.departmentfilter == "my":
             departmentfilter = self.request.user.departments.all()
             devicegroups = devicegroups.filter(Q(department__in=departmentfilter) | Q(department=None))
+
         return devicegroups
 
 
     def get_context_data(self, **kwargs):
+        '''method for getting context data of device'''
         # Call the base implementation first to get a context
         context = super(DevicegroupList, self).get_context_data(**kwargs)
         context["breadcrumbs"] = [
             (reverse("devicegroup-list"), _("Devicegroups"))]
         context["viewform"] = DepartmentViewForm(initial={"viewsorting": self.viewsorting,
             "departmentfilter": self.departmentfilter})
+
         if self.filterstring:
             context["filterform"] = FilterForm(initial={"filterstring": self.filterstring})
         else:
             context["filterform"] = FilterForm()
+
         if context["is_paginated"] and context["page_obj"].number > 1:
             context["breadcrumbs"].append(["", context["page_obj"].number])
+
         return context
 
 
@@ -69,6 +79,7 @@ class DevicegroupDetail(DetailView):
     template_name = "devicegroups/devicegroup_detail.html"
 
     def get_context_data(self, **kwargs):
+        '''method for getting context data of device'''
         # Call the base implementation first to get a context
         context = super(DevicegroupDetail, self).get_context_data(**kwargs)
 
@@ -82,6 +93,7 @@ class DevicegroupDetail(DetailView):
             (reverse("devicegroup-list"), _("Devicegroups")),
             (reverse("devicegroup-detail", kwargs={"pk": self.object.pk}), self.object)]
         context['device_list'] = Device.objects.filter(group=context["devicegroup"], archived=None)
+
         return context
 
 
@@ -94,11 +106,13 @@ class DevicegroupCreate(CreateView):
         # Call the base implementation first to get a context
         context = super(DevicegroupCreate, self).get_context_data(**kwargs)
         context['type'] = "devicegroup"
+
         if self.request.user.main_department:
             context["form"].fields["department"].initial = self.request.user.main_department
         context["breadcrumbs"] = [
             (reverse("devicegroup-list"), _("Devicegroups")),
             ("", _("Create new devicegroup"))]
+
         return context
 
 
@@ -114,6 +128,7 @@ class DevicegroupUpdate(UpdateView):
             (reverse("devicegroup-list"), _("Devicegroups")),
             (reverse("devicegroup-detail", kwargs={"pk": self.object.pk}), self.object),
             ("", _("Edit"))]
+
         return context
 
 
@@ -129,4 +144,5 @@ class DevicegroupDelete(DeleteView):
             (reverse("devicegroup-list"), _("Devicegroups")),
             (reverse("devicegroup-detail", kwargs={"pk": self.object.pk}), self.object),
             ("", _("Delete"))]
+
         return context

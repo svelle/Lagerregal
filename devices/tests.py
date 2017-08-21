@@ -11,12 +11,15 @@ from network.models import IpAddress
 
 
 class DeviceTests(TestCase):
+
     def setUp(self):
+        '''method for setting up a client for testing'''
         self.client = Client()
         my_admin = Lageruser.objects.create_superuser('test', 'test@test.com', "test")
         self.client.login(username="test", password="test")
 
     def test_device_creation(self):
+        '''method for testing the functionality of creating a new device'''
         device = mommy.make(Device)
         self.assertTrue(isinstance(device, Device))
         self.assertEqual(device.__unicode__(), device.name)
