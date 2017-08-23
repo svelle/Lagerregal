@@ -62,11 +62,13 @@ class DevicegroupList(PaginationMixin, ListView):
         context["viewform"] = DepartmentViewForm(initial={"viewsorting": self.viewsorting,
             "departmentfilter": self.departmentfilter})
 
+        # filtering
         if self.filterstring:
             context["filterform"] = FilterForm(initial={"filterstring": self.filterstring})
         else:
             context["filterform"] = FilterForm()
 
+        # show pagenumber in breadcrumbs
         if context["is_paginated"] and context["page_obj"].number > 1:
             context["breadcrumbs"].append(["", context["page_obj"].number])
 
@@ -89,6 +91,7 @@ class DevicegroupDetail(DetailView):
                 context["label_js"] += "\n" + "label.setObjectText('{0}', '{1}');".format(attribute, getattr(
                     context["devicegroup"], attribute))
 
+        # add devicegroup to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("devicegroup-list"), _("Devicegroups")),
             (reverse("devicegroup-detail", kwargs={"pk": self.object.pk}), self.object)]
@@ -109,6 +112,8 @@ class DevicegroupCreate(CreateView):
 
         if self.request.user.main_department:
             context["form"].fields["department"].initial = self.request.user.main_department
+
+        # add create new device to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("devicegroup-list"), _("Devicegroups")),
             ("", _("Create new devicegroup"))]
@@ -124,6 +129,8 @@ class DevicegroupUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DevicegroupUpdate, self).get_context_data(**kwargs)
+
+        # add devicegroup and edit to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("devicegroup-list"), _("Devicegroups")),
             (reverse("devicegroup-detail", kwargs={"pk": self.object.pk}), self.object),
@@ -140,6 +147,8 @@ class DevicegroupDelete(DeleteView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DevicegroupDelete, self).get_context_data(**kwargs)
+
+        # should add devicegroup and delete to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("devicegroup-list"), _("Devicegroups")),
             (reverse("devicegroup-detail", kwargs={"pk": self.object.pk}), self.object),
