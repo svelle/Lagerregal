@@ -8,6 +8,7 @@ from devicetypes.views import *
 from main.views import *
 from api.views import *
 from mail.views import *
+from departments.views import *
 from devicegroups.views import *
 from devicetags.views import *
 from locations.views import *
