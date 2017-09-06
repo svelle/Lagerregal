@@ -49,11 +49,12 @@ class TypeList(PaginationMixin, ListView):
         else:
             context["filterform"] = FilterForm()
 
-        # show pagenumber in breadcrumbs
+        # show page number in breadcrumbs
         if context["is_paginated"] and context["page_obj"].number > 1:
             context["breadcrumbs"].append(["", context["page_obj"].number])
 
         return context
+
 
 class TypeDetail(DetailView):
     model = Type
@@ -64,10 +65,12 @@ class TypeDetail(DetailView):
         # Call the base implementation first to get a context
         context = super(TypeDetail, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the books
+        # adds data of related devices and attributes
         context["merge_list"] = Type.objects.exclude(pk=context["object"].pk).order_by("name")
         context['device_list'] = Device.objects.filter(devicetype=context["object"], archived=None, trashed=None)
         context["attribute_list"] = TypeAttribute.objects.filter(devicetype=context["object"])
 
+        # use given label template if existing
         if "type" in settings.LABEL_TEMPLATES:
             context["label_js"] = ""
             for attribute in settings.LABEL_TEMPLATES["type"][1]:
@@ -93,6 +96,8 @@ class TypeCreate(CreateView):
         # Add in a QuerySet of all the books
         context['actionstring'] = _("Create new Devicetype")
         context['type'] = "type"
+
+        # adds "Create new Devicetype" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("type-list"), _("Devicetypes")),
             ("", _("Create new Devicetype"))]
@@ -100,9 +105,9 @@ class TypeCreate(CreateView):
         return context
 
     def form_valid(self, form):
-        '''method for creating the new devicetype if form is valid'''
         newobject = form.save()
 
+        # creating new attributes to devicetype
         for key, value in form.cleaned_data.iteritems():
             if key.startswith("extra_field_") and value != "":
                 attribute = TypeAttribute()
@@ -126,10 +131,13 @@ class TypeUpdate(UpdateView):
         context["attribute_list"] = TypeAttribute.objects.filter(devicetype=context["object"])
         context["form"].fields.pop("extra_field_0")
         context["form"]["extra_fieldcount"].initial = context["attribute_list"].count()
+
+        # adds "Edit" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("type-list"), _("Devicetypes")),
             (reverse("type-detail", kwargs={"pk": context["object"].pk}), context["object"]),
             ("", _("Edit"))]
+
         return context
 
 
@@ -141,10 +149,13 @@ class TypeDelete(DeleteView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(TypeDelete, self).get_context_data(**kwargs)
+
+        # should add "Delete" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("type-list"), _("Devicetypes")),
             (reverse("type-detail", kwargs={"pk": context["object"].pk}), context["object"]),
             ("", _("Delete"))]
+
         return context
 
 
@@ -155,29 +166,39 @@ class TypeMerge(View):
         context = {}
         context["oldobject"] = get_object_or_404(self.model, pk=kwargs["oldpk"])
         context["newobject"] = get_object_or_404(self.model, pk=kwargs["newpk"])
+
+        # adds "Merge with devicetype name" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("type-list"), _("Devicetypes")),
             (reverse("type-detail", kwargs={"pk": context["oldobject"].pk}), context["oldobject"]),
             ("", _("Merge with {0}".format(context["newobject"])))]
+
         return render(request, 'devices/base_merge.html', context)
 
     def post(self, request, *args, **kwargs):
         oldobject = get_object_or_404(self.model, pk=kwargs["oldpk"])
         newobject = get_object_or_404(self.model, pk=kwargs["newpk"])
 
+        # adds all devices of old devicetype to new devicetype
         devices = Device.objects.filter(devicetype=oldobject)
         for device in devices:
             device.devicetype = newobject
             reversion.set_comment(_("Merged Devicetype {0} into {1}".format(oldobject, newobject)))
             device.save()
 
+        # adds all attributes of old devicetype to new devicetype
         attributes = TypeAttribute.objects.filter(devicetype=oldobject)
         for attribute in attributes:
             attribute.devicetype = newobject
             attribute.save()
         oldobject.delete()
+
         return HttpResponseRedirect(newobject.get_absolute_url())
 
+
+######################################################################################################################
+#                                           attribute related views                                                  #
+######################################################################################################################
 
 class TypeAttributeCreate(CreateView):
     model = TypeAttribute
