@@ -14,12 +14,16 @@ from devices.forms import ViewForm, VIEWSORTING, FilterForm
 from Lagerregal.utils import PaginationMixin
 
 
+######################################################################################################################
+#                                                   section views                                                    #
+######################################################################################################################
+
 class SectionList(PaginationMixin, ListView):
     model = Section
     context_object_name = 'section_list'
 
     def get_queryset(self):
-        '''method for selecting all sections (sorted) matching the filter'''
+        '''method for selecting all sections (sorted) matching the filter (if existing)'''
         sections = Section.objects.all()
         self.filterstring = self.kwargs.pop("filter", None)
 
@@ -93,6 +97,7 @@ class SectionDetail(DetailView):
                                                        trashed=None).values("id", "name", "inventorynumber",
                                                                             "devicetype__name")
 
+        # display section attributes, if they exist
         if "section" in settings.LABEL_TEMPLATES:
             context["label_js"] = ""
             for attribute in settings.LABEL_TEMPLATES["section"][1]:
@@ -121,6 +126,7 @@ class SectionUpdate(UpdateView):
         # Call the base implementation first to get a context
         context = super(SectionUpdate, self).get_context_data(**kwargs)
 
+        # adding section name to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("section-list"), _("Section")),
             (reverse("section-edit", kwargs={"pk": self.object.pk}), self.object)]
@@ -136,9 +142,12 @@ class SectionDelete(DeleteView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(SectionDelete, self).get_context_data(**kwargs)
+
+        # adding section name to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("section-list"), _("Sections")),
             (reverse("section-delete", kwargs={"pk": self.object.pk}), self.object)]
+
         return context
 
 
@@ -149,10 +158,13 @@ class SectionMerge(View):
         context = {}
         context["oldobject"] = get_object_or_404(self.model, pk=kwargs["oldpk"])
         context["newobject"] = get_object_or_404(self.model, pk=kwargs["newpk"])
+
+        # add "Merge with section name" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("section-list"), _("Sections")),
             (reverse("section-detail", kwargs={"pk": context["oldobject"].pk}), context["oldobject"].name),
             ("", _("Merge with {0}".format(context["newobject"].name)))]
+
         return render(request, 'devices/base_merge.html', context)
 
     @atomic
@@ -160,25 +172,40 @@ class SectionMerge(View):
         oldobject = get_object_or_404(self.model, pk=kwargs["oldpk"])
         newobject = get_object_or_404(self.model, pk=kwargs["newpk"])
         rooms = Room.objects.filter(section=oldobject)
+
+        # merge all rooms of the old section to the new section
         for room in rooms:
             room.section = newobject
             reversion.set_comment(_("Merged Section {0} into {1}".format(oldobject, newobject)))
             room.save()
         oldobject.delete()
+
         return HttpResponseRedirect(newobject.get_absolute_url())
+
+
+######################################################################################################################
+#                                                   room views                                                       #
+######################################################################################################################
 
 class RoomList(PaginationMixin, ListView):
     model = Room
     context_object_name = 'room_list'
 
     def get_queryset(self):
+        '''method for getting all rooms matching the filter (if existing) and display sorted (by ID or name)'''
         rooms = Room.objects.select_related("building").all()
         self.filterstring = self.kwargs.pop("filter", None)
+
+        # filtering, if filter exist
         if self.filterstring:
             rooms = rooms.filter(name__icontains=self.filterstring)
+
         self.viewsorting = self.kwargs.pop("sorting", "name")
+
+        # sort view by name or ID
         if self.viewsorting in [s[0] for s in VIEWSORTING]:
             rooms = rooms.order_by(self.viewsorting)
+
         return rooms
 
     def get_context_data(self, **kwargs):
@@ -186,12 +213,17 @@ class RoomList(PaginationMixin, ListView):
         context = super(RoomList, self).get_context_data(**kwargs)
         context["breadcrumbs"] = [(reverse("room-list"), _("Rooms"))]
         context["viewform"] = ViewForm(initial={"viewsorting": self.viewsorting})
+
+        # filtering
         if self.filterstring:
             context["filterform"] = FilterForm(initial={"filterstring": self.filterstring})
         else:
             context["filterform"] = FilterForm()
+
+        # add page number to breadcrumbs, if there are multiple pages
         if context["is_paginated"] and context["page_obj"].number > 1:
             context["breadcrumbs"].append(["", context["page_obj"].number])
+
         return context
 
 
@@ -203,13 +235,14 @@ class RoomDetail(DetailView):
         # Call the base implementation first to get a context
         context = super(RoomDetail, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the books
+        # show related buildings and devices
         context["merge_list"] = Room.objects.exclude(pk=context["room"].pk).order_by("name").values("id", "name",
                                                                                                     "building__name")
         context['device_list'] = Device.objects.select_related().filter(room=context["room"], archived=None,
                                                                         trashed=None).values("id", "name",
                                                                                              "inventorynumber",
                                                                                              "devicetype__name")
-
+        # add building header to view and display related building
         if "room" in settings.LABEL_TEMPLATES:
             context["label_js"] = ""
             for attribute in settings.LABEL_TEMPLATES["room"][1]:
@@ -221,9 +254,11 @@ class RoomDetail(DetailView):
                                                                                               getattr(context["room"],
                                                                                                       attribute))
 
+        # add room name to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("room-list"), _("Rooms")),
             (reverse("room-detail", kwargs={"pk": context["room"].pk}), context["room"].name)]
+
         return context
 
 
@@ -238,9 +273,12 @@ class RoomCreate(CreateView):
         # Add in a QuerySet of all the books
         context['actionstring'] = "Create new Room"
         context['type'] = "room"
+
+        # add "Create new room" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("room-list"), _("Rooms")),
             ("", _("Create new room"))]
+
         return context
 
 
@@ -254,6 +292,8 @@ class RoomUpdate(UpdateView):
         context = super(RoomUpdate, self).get_context_data(**kwargs)
         # Add in a QuerySet of all the books
         context['actionstring'] = "Update"
+
+        # add "Edit" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("room-list"), _("Rooms")),
             (reverse("room-detail", kwargs={"pk": context["object"].pk}), context["object"].name),
@@ -269,10 +309,13 @@ class RoomDelete(DeleteView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(RoomDelete, self).get_context_data(**kwargs)
+
+        # should add "Delete" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("room-list"), _("Rooms")),
             (reverse("room-detail", kwargs={"pk": context["object"].pk}), context["object"].name),
             ("", _("Delete"))]
+
         return context
 
 
@@ -282,10 +325,13 @@ class RoomMerge(View):
     def get(self, request, *args, **kwargs):
         context = {"oldobject": get_object_or_404(self.model, pk=kwargs["oldpk"]),
                    "newobject": get_object_or_404(self.model, pk=kwargs["newpk"])}
+
+        # add "Merge with room name" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("room-list"), _("Rooms")),
             (reverse("room-detail", kwargs={"pk": context["oldobject"].pk}), context["oldobject"].name),
             ("", _("Merge with {0}".format(context["newobject"].name)))]
+
         return render(request, 'devices/base_merge.html', context)
 
     @atomic
@@ -293,13 +339,19 @@ class RoomMerge(View):
         oldobject = get_object_or_404(self.model, pk=kwargs["oldpk"])
         newobject = get_object_or_404(self.model, pk=kwargs["newpk"])
         devices = Device.objects.filter(room=oldobject)
+
+        # adds all devices of the old room to the new room
         for device in devices:
             device.room = newobject
             reversion.set_comment(_("Merged Room {0} into {1}".format(oldobject, newobject)))
             device.save()
         oldobject.delete()
+
         return HttpResponseRedirect(newobject.get_absolute_url())
 
+#######################################################################################################################
+#                                                   building views                                                    #
+#######################################################################################################################
 
 class BuildingList(PaginationMixin, ListView):
     model = Building
@@ -421,6 +473,8 @@ class BuildingDelete(DeleteView):
         '''method for getting contexdt data to expand breadcrumbs'''
         # Call the base implementation first to get a context
         context = super(BuildingDelete, self).get_context_data(**kwargs)
+
+        # should add "Delete" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("building-list"), _("Buildings")),
             (reverse("building-detail", kwargs={"pk": context["object"].pk}), context["object"].name),
@@ -451,7 +505,7 @@ class BuildingMerge(View):
         newobject = get_object_or_404(self.model, pk=kwargs["newpk"])
         rooms = Room.objects.filter(building=oldobject)
 
-        # update room data
+        # add all rooms of old building to new building
         for room in rooms:
             room.building = newobject
             room.save()
