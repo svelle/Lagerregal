@@ -15,7 +15,7 @@ class DevicegroupList(PaginationMixin, ListView):
     context_object_name = 'devicegroup_list'
 
     def get_queryset(self):
-        '''method to query all devicegroups and filter it by department or other filter'''
+        '''method to query all devicegroups and filter and sort it'''
         devicegroups = Devicegroup.objects.all()
         self.filterstring = self.kwargs.pop("filter", None)
 
@@ -25,7 +25,7 @@ class DevicegroupList(PaginationMixin, ListView):
         if self.filterstring:
             devicegroups = devicegroups.filter(name__icontains=self.filterstring)
 
-        # sort list of devices by given viewsorting-parameter
+        # sort list of devices by name or ID
         self.viewsorting = self.kwargs.pop("sorting", "name")
         if self.viewsorting in [s[0] for s in VIEWSORTING]:
             devicegroups = devicegroups.order_by(self.viewsorting)
@@ -84,6 +84,7 @@ class DevicegroupDetail(DetailView):
         # Call the base implementation first to get a context
         context = super(DevicegroupDetail, self).get_context_data(**kwargs)
 
+        # if label templates exist, use it to show details
         if "devicegroup" in settings.LABEL_TEMPLATES:
             context["label_js"] = ""
             for attribute in settings.LABEL_TEMPLATES["devicegroup"][1]:
@@ -109,6 +110,7 @@ class DevicegroupCreate(CreateView):
         context = super(DevicegroupCreate, self).get_context_data(**kwargs)
         context['type'] = "devicegroup"
 
+        # if user has main department use it as default in form
         if self.request.user.main_department:
             context["form"].fields["department"].initial = self.request.user.main_department
 

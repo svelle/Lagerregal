@@ -24,7 +24,7 @@ class DevicetagList(PaginationMixin, ListView):
         if self.filterstring:
             devicetags = devicetags.filter(name__icontains=self.filterstring)
 
-        # sort view of devicetags
+        # sort view of devicetags by name or ID
         self.viewsorting = self.kwargs.pop("sorting", "name")
         if self.viewsorting in [s[0] for s in VIEWSORTING]:
             devicetags = devicetags.order_by(self.viewsorting)
@@ -45,7 +45,7 @@ class DevicetagList(PaginationMixin, ListView):
         else:
             context["filterform"] = FilterForm()
 
-        # add pagenumber to breadcrumbs
+        # add page number to breadcrumbs
         if context["is_paginated"] and context["page_obj"].number > 1:
             context["breadcrumbs"].append(["", context["page_obj"].number])
 
@@ -80,6 +80,8 @@ class DevicetagUpdate(UpdateView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DevicetagUpdate, self).get_context_data(**kwargs)
+
+        # adds "Devicetag" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("devicetag-list"), _("Devicetag")),
             (reverse("devicetag-edit", kwargs={"pk": self.object.pk}), self.object)]
@@ -95,6 +97,8 @@ class DevicetagDelete(DeleteView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(DevicetagDelete, self).get_context_data(**kwargs)
+
+        # adds "Devicetag" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("devicetag-list"), _("Devicetags")),
             (reverse("devicetag-delete", kwargs={"pk": self.object.pk}), self.object)]
@@ -110,6 +114,8 @@ class DeviceTags(FormView):
     def get_context_data(self, **kwargs):
         context = super(DeviceTags, self).get_context_data(**kwargs)
         device = context["form"].cleaned_data["device"]
+
+        # adds "Devices" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("device-list"), _("Devices")),
             (reverse("device-detail", kwargs={"pk": device.pk}), device.name),
@@ -133,6 +139,8 @@ class DeviceTagRemove(DeleteView):
         context = {}
         context["device"] = get_object_or_404(Device, pk=kwargs["pk"])
         context["tag"] = get_object_or_404(Devicetag, pk=kwargs["tag"])
+
+        # adds "Devices" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("device-list"), _("Devices")),
             (reverse("device-detail", kwargs={"pk": context["device"].pk}), context["device"].name),
