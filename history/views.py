@@ -1,11 +1,10 @@
 from django.contrib import messages
 from django.http import HttpResponseRedirect
-from django.views.generic import ListView, View, UpdateView
+from django.views.generic import ListView, UpdateView
 from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _, ugettext
+from django.utils.translation import ugettext_lazy as _
 from django.shortcuts import get_object_or_404
 from django.contrib.contenttypes.models import ContentType
-from django.shortcuts import render
 from reversion.models import Version, Revision
 from reversion import revisions as reversion
 from django.apps import apps

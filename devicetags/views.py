@@ -89,6 +89,7 @@ class DevicetagUpdate(UpdateView):
         return context
 
 
+##################### never used
 class DevicetagDelete(DeleteView):
     model = Devicetag
     success_url = reverse_lazy('devicetag-list')

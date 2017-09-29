@@ -16,6 +16,7 @@ class MailList(PaginationMixin, ListView):
     context_object_name = 'mail_list'
 
     def get_queryset(self):
+        '''method for query all mailtemplates from database'''
         return MailTemplate.objects.filter(department__in=self.request.user.departments.all())
 
     def get_context_data(self, **kwargs):
@@ -24,6 +25,7 @@ class MailList(PaginationMixin, ListView):
         context["breadcrumbs"] = [
             (reverse("mail-list"), _("Mailtemplates"))]
 
+        # adds pagenumber to breadcrumbs if there are multiple pages
         if context["is_paginated"] and context["page_obj"].number > 1:
             context["breadcrumbs"].append(["", context["page_obj"].number])
         return context
@@ -37,6 +39,8 @@ class MailDetail(DetailView):
     def get_context_data(self, **kwargs):
         # Call the base implementation first to get a context
         context = super(MailDetail, self).get_context_data(**kwargs)
+
+        # adds name of mailtemplate to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("mail-list"), _("Mailtemplates")),
             (reverse("mail-detail", kwargs={"pk": self.object.pk}), self.object)]
@@ -51,6 +55,7 @@ class MailCreate(CreateView):
     def get_initial(self):
         initial = super(MailCreate, self).get_initial()
         if self.request.user.main_department:
+            # sets initial department depending on users main department
             initial["department"] = self.request.user.main_department
         return initial
 
@@ -59,6 +64,8 @@ class MailCreate(CreateView):
         context = super(MailCreate, self).get_context_data(**kwargs)
         context["form"].fields["department"].queryset = self.request.user.departments.all()
         context['type'] = "mail"
+
+        # adds "Create new mailtemplate" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("mail-list"), _("Mailtemplates")),
             ("", _("Create new mailtemplate"))]
@@ -72,6 +79,8 @@ class MailCreate(CreateView):
                 obj = get_object_or_404(Group, pk=recipient[1:])
             else:
                 obj = get_object_or_404(Lageruser, pk=recipient[1:])
+
+            # defining and saving new mailtemplate
             recipient = MailTemplateRecipient(content_object=obj)
             recipient.mailtemplate = self.object
             recipient.save()
@@ -84,6 +93,7 @@ class MailUpdate(UpdateView):
     template_name = 'devices/base_form.html'
 
     def get_initial(self):
+        '''method for fetching initial content of mailtemplate'''
         initial = super(MailUpdate, self).get_initial()
         initial["default_recipients"] = [obj.content_type.name[0].lower() + str(obj.object_id) for obj in
                                          self.object.default_recipients.all()]
@@ -93,6 +103,8 @@ class MailUpdate(UpdateView):
         # Call the base implementation first to get a context
         context = super(MailUpdate, self).get_context_data(**kwargs)
         context["form"].fields["department"].queryset = self.request.user.departments.all()
+
+        # adds "Edit" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("mail-list"), _("Mailtemplates")),
             (reverse("mail-detail", kwargs={"pk": self.object.pk}), self.object),
@@ -108,11 +120,14 @@ class MailUpdate(UpdateView):
                 recipient.delete()
             else:
                 form.cleaned_data["default_recipients"].remove(identifier)
+
         for recipient in form.cleaned_data["default_recipients"]:
             if recipient[0] == "g":
                 obj = get_object_or_404(Group, pk=recipient[1:])
             else:
                 obj = get_object_or_404(Lageruser, pk=recipient[1:])
+
+            # save new edited mailtemplate
             rec = MailTemplateRecipient(content_object=obj)
             rec.mailtemplate = self.object
             rec.save()
