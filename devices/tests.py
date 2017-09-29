@@ -5,7 +5,7 @@ from django.test import TestCase
 from model_mommy import mommy
 from django.core.urlresolvers import reverse
 
-from devices.models import Device, Manufacturer, Template, Note
+from devices.models import Device, Template, Note
 from users.models import Lageruser
 from network.models import IpAddress
 
@@ -180,69 +180,6 @@ class DeviceTests(TestCase):
         resp = self.client.get(deviceurl)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(len(resp.context["device"].ipaddress_set.all()), 0)
-
-class ManufacturerTests(TestCase):
-    def setUp(self):
-        '''method for setting up a testing environment'''
-        self.client = Client()
-        my_admin = Lageruser.objects.create_superuser('test', 'test@test.com', "test")
-        self.client.login(username="test", password="test")
-
-    def test_manufacturer_creation(self):
-        '''method for testing the functionality of creating a manufacturer'''
-        manufacturer = mommy.make(Manufacturer)
-        self.assertTrue(isinstance(manufacturer, Manufacturer))
-        self.assertEqual(manufacturer.__unicode__(), manufacturer.name)
-        self.assertEqual(manufacturer.get_absolute_url(),
-                         reverse('manufacturer-detail', kwargs={'pk': manufacturer.pk}))
-        self.assertEqual(manufacturer.get_edit_url(), reverse('manufacturer-edit', kwargs={'pk': manufacturer.pk}))
-
-    def test_manufacturer_list(self):
-        '''method for testing the presentation and reachability of the manufacturer-list-view for several pages'''
-        manufacturers = mommy.make(Manufacturer, _quantity=40)
-        url = reverse("manufacturer-list")
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(len(resp.context["manufacturer_list"]), 30)
-        self.assertEqual(resp.context["paginator"].num_pages, 2)
-
-        url = reverse("manufacturer-list", kwargs={"page": 2})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_manufacturer_detail(self):
-        '''method for testing the reachability of the detail-view of the choosen manufacturer'''
-        manufacturer = mommy.make(Manufacturer)
-        manufacturers = Manufacturer.objects.all()
-        manufacturer = manufacturers[0]
-        url = reverse("manufacturer-detail", kwargs={"pk": manufacturer.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_manufacturer_add(self):
-        '''method for testing the functionality of adding a manufacturer'''
-        manufacturer = mommy.make(Manufacturer)
-        url = reverse("manufacturer-add")
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_manufacturer_edit(self):
-        '''method for testing the functionality of editing a manufacturer'''
-        manufacturer = mommy.make(Manufacturer)
-        manufacturers = Manufacturer.objects.all()
-        manufacturer = manufacturers[0]
-        url = reverse("manufacturer-edit", kwargs={"pk": manufacturer.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_manufacturer_delete(self):
-        '''method for testing the functionality of deleting a manufacturer'''
-        manufacturer = mommy.make(Manufacturer)
-        manufacturers = Manufacturer.objects.all()
-        manufacturer = manufacturers[0]
-        url = reverse("manufacturer-edit", kwargs={"pk": manufacturer.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
 
 
 class TemplateTests(TestCase):

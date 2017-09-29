@@ -82,9 +82,11 @@ class Manufacturer(models.Model):
         )
 
     def get_absolute_url(self):
+        # will create an url: /manufacturers/view/primary key
         return reverse('manufacturer-detail', kwargs={'pk': self.pk})
 
     def get_edit_url(self):
+        # will create an url: /manufacturers/view/primary key
         return reverse('manufacturer-edit', kwargs={'pk': self.pk})
 
 
