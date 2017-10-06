@@ -1,4 +1,3 @@
-
 from django.test.client import Client
 from django.test import TestCase
 from model_mommy import mommy
@@ -17,7 +16,8 @@ class ManufacturerTests(TestCase):
 
     def test_manufacturer_creation(self):
         '''method for testing the functionality of creating a manufacturer'''
-        manufacturer = mommy.make(Manufacturer) # creating an instance of Manufacturer
+        # creating an instance of Manufacturer and testing if this instance is instance of Manufacturer
+        manufacturer = mommy.make(Manufacturer)
         self.assertTrue(isinstance(manufacturer, Manufacturer))
         self.assertEqual(manufacturer.__unicode__(), manufacturer.name)
 
@@ -40,7 +40,7 @@ class ManufacturerTests(TestCase):
         self.assertEqual(len(resp.context["manufacturer_list"]), 30)
         self.assertEqual(resp.context["paginator"].num_pages, 2)
 
-        # testing response of second page of manufacturer-list
+        # testing if loading of second page of manufacturer-list was successful (statuscode 2xx)
         url = reverse("manufacturer-list", kwargs={"page": 2})
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
@@ -59,24 +59,32 @@ class ManufacturerTests(TestCase):
     def test_manufacturer_add(self):
         '''method for testing the functionality of adding a manufacturer'''
         manufacturer = mommy.make(Manufacturer)
+
+        # testing if loading of of add-page was successful (statuscode 2xx)
         url = reverse("manufacturer-add")
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
 
     def test_manufacturer_edit(self):
         '''method for testing the functionality of editing a manufacturer'''
+        # fetching all manufacturers and use first one in list to test
         manufacturer = mommy.make(Manufacturer)
         manufacturers = Manufacturer.objects.all()
         manufacturer = manufacturers[0]
+
+        # testing if loading of of edit-page was successful (statuscode 2xx)
         url = reverse("manufacturer-edit", kwargs={"pk": manufacturer.pk})
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
 
     def test_manufacturer_delete(self):
         '''method for testing the functionality of deleting a manufacturer'''
+        # fetching all manufacturers and uses first element in list for testing
         manufacturer = mommy.make(Manufacturer)
         manufacturers = Manufacturer.objects.all()
         manufacturer = manufacturers[0]
+
+        # should test if loading of delete-page was successful (statuscode 2xx)
         url = reverse("manufacturer-edit", kwargs={"pk": manufacturer.pk})
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
