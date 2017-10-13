@@ -222,7 +222,8 @@ class DeviceDetail(DetailView):
         context["mailform"] = DeviceMailForm(initial=mailinitial)
         context["mailform"].fields["mailtemplate"].queryset = MailTemplate.objects.filter(
             department__in=self.request.user.departments.all())
-        versions = reversion.get_for_object(context["device"])
+
+        versions = Version.objects.get_for_object(context["device"])
 
         if len(versions) != 0:
             context["lastedit"] = versions[0]
@@ -479,7 +480,7 @@ class DeviceUpdate(UpdateView):
             reversion.set_comment(_("Updated"))
         else:
             reversion.set_comment(form.cleaned_data["comment"])
-        reversion.set_ignore_duplicates(True)
+
 
         if device.devicetype is not None:
             if form.cleaned_data["devicetype"] is None or device.devicetype.pk != form.cleaned_data["devicetype"].pk:
@@ -596,7 +597,6 @@ class DeviceLend(FormView):
         lending.owner = get_object_or_404(Lageruser, pk=form.cleaned_data["owner"].pk)
         lending.duedate = form.cleaned_data["duedate"]
         lending.save()
-        reversion.set_ignore_duplicates(True)
         messages.success(self.request, _('Device is marked as lend to {0}').format(
             get_object_or_404(Lageruser, pk=form.cleaned_data["owner"].pk)))
         if form.cleaned_data["device"]:
@@ -614,7 +614,6 @@ class DeviceInventoried(View):
         device = get_object_or_404(Device, pk=deviceid)
         device.inventoried = timezone.now()
         device.save()
-        reversion.set_ignore_duplicates(True)
         messages.success(request, _('Device is marked as inventoried.'))
         return HttpResponseRedirect(reverse("device-detail", kwargs={"pk": device.pk}))
 
@@ -673,7 +672,6 @@ class DeviceReturn(FormView):
             owner = lending.owner
         lending.returndate = datetime.datetime.now()
         lending.save()
-        reversion.set_ignore_duplicates(True)
         messages.success(self.request, _('Device is marked as returned'))
         if device != None:
             return HttpResponseRedirect(reverse("device-detail", kwargs={"pk": device.pk}))
@@ -741,8 +739,6 @@ class DeviceArchive(SingleObjectTemplateResponseMixin, BaseDetailView):
         else:
             device.archived = None
         device.save()
-        # reversion.set_comment("Archived")
-        reversion.set_ignore_duplicates(True)
         reversion.set_comment(_("Device was archived".format(device.name)))
         messages.success(request, _("Device was archived."))
         return HttpResponseRedirect(reverse("device-detail", kwargs={"pk": device.pk}))
@@ -780,8 +776,7 @@ class DeviceTrash(SingleObjectTemplateResponseMixin, BaseDetailView):
         else:
             device.trashed = None
         device.save()
-        # reversion.set_comment("Archived")
-        reversion.set_ignore_duplicates(True)
+
         reversion.set_comment(_("Device was trashed".format(device.name)))
         messages.success(request, _("Device was trashed."))
         return HttpResponseRedirect(reverse("device-detail", kwargs={"pk": device.pk}))
@@ -831,7 +826,7 @@ class DeviceStorage(SingleObjectMixin, FormView):
                         recipients.append(recipient.email)
                 template.send(self.request, recipients, {"device": device, "user": self.request.user})
                 messages.success(self.request, _('Mail successfully sent'))
-        reversion.set_ignore_duplicates(True)
+
         messages.success(self.request, _("Device was moved to storage."))
         return HttpResponseRedirect(reverse("device-detail", kwargs={"pk": device.pk}))
 
