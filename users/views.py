@@ -51,7 +51,9 @@ class UserList(PaginationMixin, ListView):
 
         # filter by given filter string
         if self.filterstring != "":
-            users = users.filter(Q(username__icontains=self.filterstring) | Q(first_name__icontains=self.filterstring) | Q(last_name__icontains=self.filterstring))
+            users = users.filter(Q(username__icontains=self.filterstring) |
+                                 Q(first_name__icontains=self.filterstring) |
+                                 Q(last_name__icontains=self.filterstring))
 
         return users
 
@@ -62,7 +64,8 @@ class UserList(PaginationMixin, ListView):
         # adds "Users" to breadcrumbs
         context["breadcrumbs"] = [
             (reverse("user-list"), _("Users")), ]
-        context["filterform"] = DepartmentFilterForm(initial={"filterstring": self.filterstring, "departmentfilter": self.departmentfilter})
+        context["filterform"] = DepartmentFilterForm(initial={"filterstring": self.filterstring,
+                                                              "departmentfilter": self.departmentfilter})
 
         # add page number to breadcrumbs if there are multiple pages
         if context["is_paginated"] and context["page_obj"].number > 1:

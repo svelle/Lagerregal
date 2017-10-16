@@ -92,4 +92,3 @@ class PublicDeviceDetailView(DetailView):
         context["nochrome"] = self.request.GET.get("nochrome", False)
 
         return context
-
