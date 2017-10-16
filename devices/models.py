@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
-#from reversion import revisions as reversion
-import reversion
+from reversion import revisions as reversion
+#import reversion
 
 from users.models import Lageruser
 from devicetypes.models import Type, TypeAttributeValue
@@ -11,6 +11,7 @@ from locations.models import Section
 import datetime
 from django.db.models import Q
 from Lagerregal import utils
+#from manufacturers.models import Manufacturer
 
 @reversion.register()
 class Building(models.Model):
@@ -39,7 +40,27 @@ class Building(models.Model):
         return reverse('building-edit', kwargs={'pk': self.pk})
 
 
+@reversion.register()
+class Manufacturer(models.Model):
+    name = models.CharField(_('Manufacturer'), max_length=200, unique=True)
 
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('Manufacturer')
+        verbose_name_plural = _('Manufacturers')
+        permissions = (
+            ("read_manufacturer", _("Can read Manufacturer")),
+        )
+
+    def get_absolute_url(self):
+        # will create an url: /manufacturers/view/primary key
+        return reverse('manufacturer-detail', kwargs={'pk': self.pk})
+
+    def get_edit_url(self):
+        # will create an url: /manufacturers/view/primary key
+        return reverse('manufacturer-edit', kwargs={'pk': self.pk})
 
 @reversion.register()
 class Room(models.Model):
@@ -65,34 +86,6 @@ class Room(models.Model):
 
     def get_edit_url(self):
         return reverse('room-edit', kwargs={'pk': self.pk})
-
-
-
-
-@reversion.register()
-class Manufacturer(models.Model):
-    name = models.CharField(_('Manufacturer'), max_length=200, unique=True)
-
-    def __unicode__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _('Manufacturer')
-        verbose_name_plural = _('Manufacturers')
-        permissions = (
-            ("read_manufacturer", _("Can read Manufacturer")),
-        )
-
-    def get_absolute_url(self):
-        # will create an url: /manufacturers/view/primary key
-        return reverse('manufacturer-detail', kwargs={'pk': self.pk})
-
-    def get_edit_url(self):
-        # will create an url: /manufacturers/view/primary key
-        return reverse('manufacturer-edit', kwargs={'pk': self.pk})
-
-
-
 
 
 class Bookmark(models.Model):

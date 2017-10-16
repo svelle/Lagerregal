@@ -145,14 +145,15 @@ class DevicegroupDelete(DeleteView):
     success_url = reverse_lazy('devicegroup-list')
     template_name = 'devices/base_delete.html'
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(DevicegroupDelete, self).get_context_data(**kwargs)
-
-        # should add devicegroup and "delete" to breadcrumbs
-        context["breadcrumbs"] = [
-            (reverse("devicegroup-list"), _("Devicegroups")),
-            (reverse("devicegroup-detail", kwargs={"pk": self.object.pk}), self.object),
-            ("", _("Delete"))]
-
-        return context
+    # !!!! there is no loading or forwarding so this part of the code is never run
+    # def get_context_data(self, **kwargs):
+    #     # Call the base implementation first to get a context
+    #     context = super(DevicegroupDelete, self).get_context_data(**kwargs)
+    #
+    #     # should add devicegroup and "delete" to breadcrumbs
+    #     context["breadcrumbs"] = [
+    #         (reverse("devicegroup-list"), _("Devicegroups")),
+    #         (reverse("devicegroup-detail", kwargs={"pk": self.object.pk}), self.object),
+    #         ("", _("Delete"))]
+    #
+    #     return context

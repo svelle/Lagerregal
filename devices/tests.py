@@ -20,71 +20,92 @@ class DeviceTests(TestCase):
 
     def test_device_creation(self):
         '''method for testing the functionality of creating a new device'''
+        # creating an instance of Device and testing if created instance is instance of Device
         device = mommy.make(Device)
-
         self.assertTrue(isinstance(device, Device))
+
+        # testing naming
         self.assertEqual(device.__unicode__(), device.name)
+
+        # testing creation of absolute and relative url
         self.assertEqual(device.get_absolute_url(), reverse('device-detail', kwargs={'pk': device.pk}))
         self.assertEqual(device.get_edit_url(), reverse('device-edit', kwargs={'pk': device.pk}))
 
     def test_device_list(self):
         '''method for testing the presentation and reachability of the list of devices over several pages'''
         devices = mommy.make(Device, _quantity=40)
+
+        # testing if loading of device-list-page was successful (statuscode 2xx)
         url = reverse("device-list")
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
+
+        # testing the presentation of only 30 results of query on one page
         self.assertEqual(len(resp.context["device_list"]), 30)
         self.assertEqual(resp.context["paginator"].num_pages, 2)
 
+        # testing the successful loading of second page of device-list (statuscode 2xx)
         url = reverse("device-list", kwargs={"page": 2})
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
 
     def test_device_detail(self):
         '''method for testing the reachability of existing devices'''
+        # querying all devices and choose first one to test
         device = mommy.make(Device)
         devices = Device.objects.all()
         device = devices[0]
-        ip = IpAddress(address="127.0.0.1")
-        ip.save()
+
+        # test successful loading of detail-view of chossen device (first one, statuscode 2xx)
         url = reverse("device-detail", kwargs={"pk": device.pk})
         resp = self.client.get(url)
-
         self.assertEqual(resp.status_code, 200)
 
     def test_device_add(self):
         '''method for testing adding a device'''
         device = mommy.make(Device)
+
+        # testing successful loading of device-page of added device (statuscode 2xx)
         url = reverse("device-add")
         resp = self.client.get(url)
-
         self.assertEqual(resp.status_code, 200)
 
     def test_device_edit(self):
         '''method for testing the functionality of editing a device'''
         device = mommy.make(Device)
+
+        # querying all devices and choose first one
         devices = Device.objects.all()
         device = devices[0]
+
+        # testing successful loading of edited device-detail-page (statuscode 2xx)
         url = reverse("device-edit", kwargs={"pk": device.pk})
         resp = self.client.get(url)
-
         self.assertEqual(resp.status_code, 200)
 
     def test_device_delete(self):
         '''method for testing the functionality of deleting a device'''
         device = mommy.make(Device)
+
+        # querying all devices and choose first one
         devices = Device.objects.all()
         device = devices[0]
+
+        # !!!! there should be no device-detail-view -> have to test the loading ao device-list!!!!
+        # testing successful loading of device-page after deletion (statuscode 2xx)
         url = reverse("device-edit", kwargs={"pk": device.pk})
         resp = self.client.get(url)
-
         self.assertEqual(resp.status_code, 200)
 
     def test_device_archive(self):
-        '''????'''
+        '''testing movement of device to archive'''
         device = mommy.make(Device)
+
+        # querying all devices and choose first one
         devices = Device.objects.all()
         device = devices[0]
+
+        # testing successful loading of device-archive-page (statuscode 3xx)
         archiveurl = reverse("device-archive", kwargs={"pk": device.pk})
         resp = self.client.post(archiveurl)
         self.assertEqual(resp.status_code, 302)

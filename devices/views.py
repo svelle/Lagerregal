@@ -1,8 +1,6 @@
 # coding: utf-8
 import datetime
 
-from django.utils.decorators import method_decorator
-from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, View, FormView, TemplateView
 from django.views.generic.detail import SingleObjectTemplateResponseMixin, BaseDetailView, SingleObjectMixin
 from django.core.urlresolvers import reverse_lazy, reverse
@@ -17,19 +15,17 @@ from django.utils import timezone
 from reversion import revisions as reversion
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.contenttypes.models import ContentType
-from django.db.transaction import atomic
 from django.conf import settings
 from django.db.models.query import QuerySet
-from django.core.exceptions import ImproperlyConfigured
-from django.http import Http404
 
-from devices.models import Device, Template, Manufacturer, Lending, Note, Bookmark, Picture
+
+from devices.models import Device, Template, Lending, Note, Bookmark, Picture
 from devicetypes.models import TypeAttribute, TypeAttributeValue
 from network.models import IpAddress
 from mail.models import MailTemplate, MailHistory
 from devices.forms import IpAddressForm, SearchForm, LendForm, DeviceViewForm, IpAddressPurposeForm
-from devices.forms import ViewForm, DeviceForm, DeviceMailForm, VIEWSORTING, VIEWSORTING_DEVICES, FilterForm, \
-    DeviceStorageForm, ReturnForm, DeviceGroupFilterForm
+from devices.forms import DeviceForm, DeviceMailForm, VIEWSORTING_DEVICES, \
+    DeviceStorageForm, ReturnForm
 from devicetags.forms import DeviceTagForm
 from users.models import Lageruser, Department
 from Lagerregal.utils import PaginationMixin
@@ -223,7 +219,7 @@ class DeviceDetail(DetailView):
         context["mailform"].fields["mailtemplate"].queryset = MailTemplate.objects.filter(
             department__in=self.request.user.departments.all())
 
-        versions = Version.objects.get_for_object(context["device"])
+        versions = reversion.get_for_object(context["device"])
 
         if len(versions) != 0:
             context["lastedit"] = versions[0]
