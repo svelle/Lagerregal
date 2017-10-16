@@ -95,16 +95,17 @@ class DevicetagDelete(DeleteView):
     success_url = reverse_lazy('devicetag-list')
     template_name = 'devices/base_delete.html'
 
-    def get_context_data(self, **kwargs):
-        # Call the base implementation first to get a context
-        context = super(DevicetagDelete, self).get_context_data(**kwargs)
-
-        # adds "Devicetag" to breadcrumbs
-        context["breadcrumbs"] = [
-            (reverse("devicetag-list"), _("Devicetags")),
-            (reverse("devicetag-delete", kwargs={"pk": self.object.pk}), self.object)]
-
-        return context
+    # !!!!! the is nor forwarding or loading so the code is never run
+    # def get_context_data(self, **kwargs):
+    #     # Call the base implementation first to get a context
+    #     context = super(DevicetagDelete, self).get_context_data(**kwargs)
+    #
+    #     # adds "Devicetag" to breadcrumbs
+    #     context["breadcrumbs"] = [
+    #         (reverse("devicetag-list"), _("Devicetags")),
+    #         (reverse("devicetag-delete", kwargs={"pk": self.object.pk}), self.object)]
+    #
+    #     return context
 
 
 class DeviceTags(FormView):

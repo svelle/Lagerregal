@@ -14,4 +14,5 @@ staticserve/
 .DS_Store
 django.mo
 media/
+*coverage_report.txt
 
