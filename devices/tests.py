@@ -4,10 +4,9 @@ from model_mommy import mommy
 from django.core.urlresolvers import reverse
 from datetime import datetime, timedelta
 
-from devices.models import Device, Building, Room, Manufacturer, Template, Note, Lending, DeviceInformationType, DeviceInformation, Picture
+from devices.models import Device, Room, Template, Note, Lending, DeviceInformationType, DeviceInformation, Picture
 from users.models import Lageruser
 from network.models import IpAddress
-from devices.forms import IpAddressForm
 
 
 class DeviceTests(TestCase):
@@ -248,180 +247,6 @@ class DeviceTests(TestCase):
         resp = self.client.post(url)
         self.assertEqual(resp.status_code, 302)
 
-
-class BuildingTests(TestCase):
-    def setUp(self):
-        self.client = Client()
-        my_admin = Lageruser.objects.create_superuser('test', 'test@test.com', "test")
-        self.client.login(username="test", password="test")
-
-    def test_building_creation(self):
-        building = mommy.make(Building)
-        building.save()
-        self.assertTrue(isinstance(building, Building))
-        self.assertEqual(building.__unicode__(), building.name)
-        self.assertEqual(building.get_absolute_url(), reverse('building-detail', kwargs={'pk': building.pk}))
-        self.assertEqual(building.get_edit_url(), reverse('building-edit', kwargs={'pk': building.pk}))
-
-    def test_building_list(self):
-        buildings = mommy.make(Building, _quantity=40)
-        url = reverse("building-list")
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(len(resp.context["building_list"]), 30)
-        self.assertEqual(resp.context["paginator"].num_pages, 2)
-        url = reverse("building-list", kwargs={"page": 2})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_building_detail(self):
-        building = mommy.make(Building)
-        buildings = Building.objects.all()
-        building = buildings[0]
-        url = reverse("building-detail", kwargs={"pk": building.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_building_add(self):
-        building = mommy.make(Building)
-        buildings = Building.objects.all()
-        building = buildings[0]
-        url = reverse("building-add")
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_building_edit(self):
-        building = mommy.make(Building)
-        buildings = Building.objects.all()
-        building = buildings[0]
-        url = reverse("building-edit", kwargs={"pk": building.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_building_delete(self):
-        building = mommy.make(Building)
-        buildings = Building.objects.all()
-        building = buildings[0]
-        url = reverse("building-delete", kwargs={"pk": building.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-
-class RoomTests(TestCase):
-    def setUp(self):
-        self.client = Client()
-        my_admin = Lageruser.objects.create_superuser('test', 'test@test.com', "test")
-        self.client.login(username="test", password="test")
-
-    def test_room_creation(self):
-        room = mommy.make(Room)
-        building = mommy.make(Building)
-        room_in_building = mommy.make(Room, building = building)
-        self.assertTrue(isinstance(room, Room))
-        self.assertEqual(room.__unicode__(), room.name)
-        self.assertTrue(isinstance(room_in_building, Room))
-        self.assertEqual(room_in_building.__unicode__(), room_in_building.name + " (" + building.__unicode__() + ")")
-        self.assertEqual(room.get_absolute_url(), reverse('room-detail', kwargs={'pk': room.pk}))
-        self.assertEqual(room.get_edit_url(), reverse('room-edit', kwargs={'pk': room.pk}))
-
-    def test_room_list(self):
-        rooms = mommy.make(Room, _quantity=40)
-        url = reverse("room-list")
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(len(resp.context["room_list"]), 30)
-        self.assertEqual(resp.context["paginator"].num_pages, 2)
-        url = reverse("room-list", kwargs={"page": 2})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_room_detail(self):
-        room = mommy.make(Room)
-        rooms = Room.objects.all()
-        room = rooms[0]
-        url = reverse("room-detail", kwargs={"pk": room.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_room_add(self):
-        room = mommy.make(Room)
-        url = reverse("room-add")
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_room_edit(self):
-        room = mommy.make(Room)
-        rooms = Room.objects.all()
-        room = rooms[0]
-        url = reverse("room-edit", kwargs={"pk": room.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_room_delete(self):
-        room = mommy.make(Room)
-        rooms = Room.objects.all()
-        room = rooms[0]
-        url = reverse("room-delete", kwargs={"pk": room.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-
-class ManufacturerTests(TestCase):
-    def setUp(self):
-        self.client = Client()
-        my_admin = Lageruser.objects.create_superuser('test', 'test@test.com', "test")
-        self.client.login(username="test", password="test")
-
-    def test_manufacturer_creation(self):
-        manufacturer = mommy.make(Manufacturer)
-        self.assertTrue(isinstance(manufacturer, Manufacturer))
-        self.assertEqual(manufacturer.__unicode__(), manufacturer.name)
-        self.assertEqual(manufacturer.get_absolute_url(),
-                         reverse('manufacturer-detail', kwargs={'pk': manufacturer.pk}))
-        self.assertEqual(manufacturer.get_edit_url(), reverse('manufacturer-edit', kwargs={'pk': manufacturer.pk}))
-
-    def test_manufacturer_list(self):
-        manufacturers = mommy.make(Manufacturer, _quantity=40)
-        url = reverse("manufacturer-list")
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-        self.assertEqual(len(resp.context["manufacturer_list"]), 30)
-        self.assertEqual(resp.context["paginator"].num_pages, 2)
-        url = reverse("manufacturer-list", kwargs={"page": 2})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_manufacturer_detail(self):
-        manufacturer = mommy.make(Manufacturer)
-        manufacturers = Manufacturer.objects.all()
-        manufacturer = manufacturers[0]
-        url = reverse("manufacturer-detail", kwargs={"pk": manufacturer.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_manufacturer_add(self):
-        manufacturer = mommy.make(Manufacturer)
-        url = reverse("manufacturer-add")
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_manufacturer_edit(self):
-        manufacturer = mommy.make(Manufacturer)
-        manufacturers = Manufacturer.objects.all()
-        manufacturer = manufacturers[0]
-        url = reverse("manufacturer-edit", kwargs={"pk": manufacturer.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-    def test_manufacturer_delete(self):
-        manufacturer = mommy.make(Manufacturer)
-        manufacturers = Manufacturer.objects.all()
-        manufacturer = manufacturers[0]
-        url = reverse("manufacturer-delete", kwargs={"pk": manufacturer.pk})
-        resp = self.client.get(url)
-        self.assertEqual(resp.status_code, 200)
-
-
 class TemplateTests(TestCase):
     def setUp(self):
         '''method for setting up a test environment'''
@@ -476,7 +301,6 @@ class TemplateTests(TestCase):
         url = reverse("template-delete", kwargs={"pk": template.pk})
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
-
 
 class NoteTests(TestCase):
     def setUp(self):
