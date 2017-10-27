@@ -353,7 +353,6 @@ urlpatterns = [
         name="history-detail"),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^i18n/', include('django.conf.urls.i18n')),
 
     url(r'^oauth2/', include('oauth2_provider.urls', namespace='oauth2_provider')),

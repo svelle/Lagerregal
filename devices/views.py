@@ -390,7 +390,8 @@ class DeviceCreate(CreateView):
             initial["emailsubject"] = initial["emailtemplate"].subject
             initial["emailbody"] = initial["emailtemplate"].body
         except Exception as e:
-            print(e)
+            if not settings.TEST_MODE:
+                print(e)
         return initial
 
     def get_context_data(self, **kwargs):
@@ -626,6 +627,7 @@ class DeviceReturn(FormView):
         context = super(DeviceReturn, self).get_context_data(**kwargs)
         context['actionstring'] = "Mark device as returned"
 
+        #get lending object with given pk
         lending = get_object_or_404(Lending, pk=self.kwargs["lending"])
 
         if lending.device:
@@ -666,7 +668,7 @@ class DeviceReturn(FormView):
                 reversion.set_comment(_("Device returned and moved to room {0}").format(device.room))
         else:
             owner = lending.owner
-        lending.returndate = datetime.datetime.now()
+        lending.returndate = datetime.date.today()
         lending.save()
         messages.success(self.request, _('Device is marked as returned'))
         if device != None:

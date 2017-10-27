@@ -1,13 +1,13 @@
-import os.path
-
 from django.test.client import Client
 from django.test import TestCase
 from model_mommy import mommy
 from django.core.urlresolvers import reverse
 
-from devices.models import Building, Room
-from users.models import Lageruser
 
+from devices.models import Building, Room
+
+from locations.models import Section
+from users.models import Lageruser
 
 
 class BuildingTests(TestCase):
@@ -179,3 +179,16 @@ class RoomTests(TestCase):
         url = reverse("room-edit", kwargs={"pk": room.pk})
         resp = self.client.get(url)
         self.assertEqual(resp.status_code, 200)
+
+
+class SectionTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+        myadmin = Lageruser.objects.create_superuser("test", "test@test.com", "test")
+        self.client.login(username = "test", password = "test")
+
+    def test_section_creation(self):
+        section = mommy.make(Section)
+        self.assertEqual(section.__unicode__(), section.name)
+        self.assertEqual(section.get_absolute_url(), reverse('section-detail', kwargs={'pk': section.pk}) )
+        self.assertEqual(section.get_edit_url(), reverse('section-edit', kwargs={'pk': section.pk}))

@@ -175,6 +175,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+        'rest_framework.authentication.SessionAuthentication',
     )
 }
 
@@ -274,7 +275,7 @@ LOGGING = {
     }
 }
 
-TEST_RUNNER = 'django.test.runner.DiscoverRunner'
+TEST_RUNNER = 'Lagerregal.utils.DetectableTestRunner'
 
 PUBLIC_DEVICES_FILTER = {}
 
@@ -286,4 +287,5 @@ THEMES = [
     'simplex',
     'superhero',
     'united',
+    'paper',
 ]

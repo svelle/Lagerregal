@@ -225,6 +225,7 @@ class Template(models.Model):
         return self.templatename
 
     class Meta:
+        ordering = ['name']
         verbose_name = _('Template')
         verbose_name_plural = _('Templates')
         permissions = (
