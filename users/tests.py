@@ -37,6 +37,7 @@ class UserTests(TestCase):
 
 
 class LageruserTests(TestCase):
+
     def setUp(self):
         self.client = Client()
         myadmin = Lageruser.objects.create_superuser('test', "test@test.com", "test")
@@ -53,6 +54,7 @@ class LageruserTests(TestCase):
 
 
 class DepartmentTests(TestCase):
+
     def setUp(self):
         self.client = Client()
         myadmin = Lageruser.objects.create_superuser('test', "test@test.com", "test")
