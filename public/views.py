@@ -8,7 +8,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.http import Http404
 
 from devices.models import Device
-from devices.forms import ViewForm, FilterForm, DeviceGroupFilterForm
+from devices.forms import ViewForm, FilterForm, DeviceGroupFilterForm, VIEWSORTING
 
 
 class PublicDeviceListView(ListView):
