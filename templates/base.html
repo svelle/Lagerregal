@@ -23,38 +23,40 @@
 </head>
 <body>
 {% if not nochrome %}
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+<nav class="navbar navbar-dark fixed-top bg-dark navbar-expand-lg" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-            <span class="sr-only">{% trans "Toggle navigation" %}</span>
-            <span class="fa fa-bar"></span>
-            <span class="fa fa-bar"></span>
-            <span class="fa fa-bar"></span>
-        </button>
+        <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">-->
+            <!--<span class="sr-only">{% trans "Toggle navigation" %}</span>-->
+            <!--<span class="fa fa-bar"></span>-->
+            <!--<span class="fa fa-bar"></span>-->
+            <!--<span class="fa fa-bar"></span>-->
+        <!--</button>-->
         <a class="navbar-brand" href="/"><i class="fa fa-archive"></i> {{ SITE_NAME }}</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse navbar-ex1-collapse">
-        <ul class="nav navbar-nav">
-                <li class="dropdown"><a href="{% url 'device-list' %}" class="dropdown-toggle"
-                                        data-toggle="dropdown">{% trans "Devices" %} <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">{% trans "Devices" %}</a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                         {% if perms.devices.read_device %}
-                            <li><a href="{% url 'device-list' %}">{% trans "Devices" %}</a></li>{% endif %}
+                            <button class="dropdown-item" href="{% url 'device-list' %}">{% trans "Devices" %}</button>{% endif %}
                         {% if perms.devicetypes.read_type %}
-                            <li><a href="{% url 'type-list' %}">{% trans "Devicetypes" %}</a></li>{% endif %}
+                            <button class="dropdown-item" href="{% url 'type-list' %}">{% trans "Devicetypes" %}</button>{% endif %}
                         {% if perms.devices.read_manufacturer %}
-                            <li><a href="{% url 'manufacturer-list' %}">{% trans "Manufacturers" %}</a></li>{% endif %}
+                            <button class="dropdown-item" href="{% url 'manufacturer-list' %}">{% trans "Manufacturers" %}</button>{% endif %}
                         {% if perms.devicegroups.read_devicegroup %}
-                            <li><a href="{% url 'devicegroup-list' %}">{% trans "Devicegroups" %}</a></li>{% endif %}
-                        <li><a href="{% url 'public-device-list' %}">{% trans "Public Devices" %}</a></li>
+                            <button class="dropdown-item" href="{% url 'devicegroup-list' %}">{% trans "Devicegroups" %}</button>{% endif %}
+                        <button class="dropdown-item" href="{% url 'public-device-list' %}">{% trans "Public Devices" %}</button>
                     </ul>
                 </li>
             {% if perms.devices.read_room or perms.devices.read_building or perms.locations.read_section %}
-                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{% trans "Locations" %}
-                    <b class="caret"></b></a>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">{% trans "Locations" %}
+                    </a>
                     <ul class="dropdown-menu">
                         {% if perms.devices.read_room %}
                             <li><a href="{% url 'room-list' %}">{% trans "Rooms" %}</a></li>{% endif %}
@@ -66,8 +68,9 @@
                 </li>
             {% endif %}
             {% if perms.mail.read_mailtemplate or perms.users.read_user or perms.network.read_ipaddress or perms.users.read_department or perms.devicetags.read_devicetags %}
-                <li class="dropdown"><a href="{% url 'device-list' %}" class="dropdown-toggle"
-                                        data-toggle="dropdown">{% trans "Manage" %} <b class="caret"></b></a>
+                <li class="nav-item dropdown">
+                    <a href="{% url 'device-list' %}" class="nav-link dropdown-toggle"
+                                        data-toggle="dropdown">{% trans "Manage" %}</a>
                     <ul class="dropdown-menu">
                         {% if perms.network.read_ipaddress %}
                             <li><a href="{% url 'ipaddress-list' %}">{% trans "IP-Addresses" %}</a></li>{% endif %}
@@ -86,10 +89,10 @@
                 <li><a href="{% url 'ipaddress-list' %}">{% trans "IP-Addresses" %}</a></li>{% endif %}
         </ul>
 
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="navbar-nav ml-auto">
             {% if user.is_authenticated %}
                 {% if perms.devices.read_device %}
-                    <li class="visible-lg visible-md">
+                    <li class="visible-lg visible-md nav-item">
                         <form method="post" action="{% url 'device-list' %}" class="navbar-form">{% csrf_token %}
                             <input id="id_namemodifier" name="namemodifier" type="hidden" value="icontains">
                             <div class="form-group">
@@ -105,7 +108,7 @@
                             </div>
                         </form>
                     </li>
-                    <li class="visible-lg visible-md">
+                    <li class="visible-lg visible-md nav-item">
                         <form method="post" action="{% url 'search' %}" class="navbar-form">{% csrf_token %}
                             <input id="id_namemodifier" name="namemodifier" type="hidden" value="icontains">
                             <div class="form-group">
@@ -121,25 +124,25 @@
                             </div>
                         </form>
                     </li>
-                    <li class="visible-lg"><a href="{% url 'search' %}">{% trans "Advanced Search" %}</a></li>
-                    <li class="visible-xs visible-sm visible-md"><a href="{% url 'search' %}">{% trans "Search" %}</a>
+                    <li class="visible-lg nav-link"><a href="{% url 'search' %}">{% trans "Advanced Search" %}</a></li>
+                    <li class="visible-xs visible-sm visible-md nav-link"><a href="{% url 'search' %}">{% trans "Search" %}</a>
                     </li>
                 {% endif %}
-                <li class="dropdown"><a href="#" data-toggle="dropdown"
-                                        class="dropdown-toggle {% if user.avatar %}navbar-user">
+                <li class="nav-item dropdown"><a href="#" data-toggle="dropdown"
+                                        class="nav-link dropdown-toggle {% if user.avatar %}navbar-user">
                                             <img class="navbar-avatar img-rounded"
                                                  src="{{ user.avatar.url }}"> {% else %}"> {% endif %}{{ user }} <b
                                                 class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{% url 'userprofile' %}"><i class="fa fa-user"></i>&nbsp; {% trans "Profile" %}</a>
+                        <li class="dropdown-item"><a href="{% url 'userprofile' %}"><i class="fa fa-user"></i>&nbsp; {% trans "Profile" %}</a>
                         </li>
-                        <li><a href="{% url 'usersettings' %}"><i class="fa fa-cog"></i>&nbsp; {% trans "Settings" %}
+                        <li class="dropdown-item"><a href="{% url 'usersettings' %}"><i class="fa fa-cog"></i>&nbsp; {% trans "Settings" %}
                         </a></li>
                         {% if user.is_staff %}
-                            <li><a href="{% url 'admin:index' %}"><i class="fa fa-lock"></i>&nbsp; {% trans "Admin" %}
+                            <li class="dropdown-item"><a href="{% url 'admin:index' %}"><i class="fa fa-lock"></i>&nbsp; {% trans "Admin" %}
                             </a></li>
                         {% endif %}
-                        <li><a href="{% url 'logout' %}"><i
+                        <li class="dropdown-item"><a href="{% url 'logout' %}"><i
                                 class="fa fa-sign-out"></i>&nbsp; {% trans "Logout" %}</a></li>
                     </ul>
                 </li>
