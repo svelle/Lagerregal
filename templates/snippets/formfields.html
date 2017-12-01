@@ -10,7 +10,7 @@
 
             <div class="col-lg-8">
                 {{ field|add_class:'form-control' }}
-                {% if field.errors or field.help_text != "" %}<p class="help-block">
+                {% if field.errors or field.help_text != "" %}<p class="from-text">
                     {% if field.errors %}{% for error in field.errors %}{{ error }}, {% endfor %}{% else %}
                         {{ field.help_text }}{% endif %}</p>{% endif %}
             </div>

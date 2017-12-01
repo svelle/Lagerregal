@@ -284,11 +284,27 @@ PUBLIC_DEVICES_FILTER = {}
 #   static/css/themes/<name>.min.css
 THEMES = [
     'default',
+    'cerulean',
+    'cosmo',
+    'cyborg',
     'darkly',
+    'flatly',
+    'journal',
+    'litera',
+    'lumen',
+    'lux',
+    'materia',
+    'minty',
+    'pulse',
+    'sandstone',
     'simplex',
+    'sketchy',
+    'slate',
+    'solar',
+    'spacelab',
     'superhero',
     'united',
-    'paper',
+    'yeti'
 ]
 
 FAVICON_PATH = STATIC_URL + 'images/favicon.ico'
