@@ -9,7 +9,7 @@
 {% block pullright %}
     {{ filterform.filterstring }}
     {{ viewform.viewsorting }}
-    {% if perms.devicetags.add_devicetag %}<a href="{% url 'section-add' %}" class="btn btn-success btn-sm pull-right">
+    {% if perms.devicetags.add_devicetag %}<a href="{% url 'section-add' %}" class="btn btn-success btn-sm float-right">
         <i class="fa fa-plus" style="margin-right:7px"></i>{% trans "Add Section" %}</a>{% endif %}
 {% endblock %}
 

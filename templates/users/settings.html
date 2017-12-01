@@ -43,7 +43,7 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="pull-right"><input id="id_avatar_clear" name="avatar_clear" type="checkbox"/> <label
+                        <div class="float-right"><input id="id_avatar_clear" name="avatar_clear" type="checkbox"/> <label
                                 for="avatar-clear_id">Remove</label></div>
                         <div class="clearfix"></div>
                     {% endif %}
@@ -64,7 +64,7 @@
 
                 <form action="{% url 'usersettings' %}" method="post" class="form-horizontal">{% csrf_token %}
                     {% include "snippets/formfields.html" with form=settingsform %}
-                    <button type="submit" class="btn btn-primary pull-right">{% trans "Submit" %}</button>
+                    <button type="submit" class="btn btn-primary float-right">{% trans "Submit" %}</button>
                 </form>
             </div>
         </div>

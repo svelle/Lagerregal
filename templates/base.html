@@ -26,12 +26,6 @@
 <nav class="navbar navbar-dark bg-dark fixed-top navbar-expand-lg" role="navigation">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-        <!--<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">-->
-            <!--<span class="sr-only">{% trans "Toggle navigation" %}</span>-->
-            <!--<span class="fa fa-bar"></span>-->
-            <!--<span class="fa fa-bar"></span>-->
-            <!--<span class="fa fa-bar"></span>-->
-        <!--</button>-->
         <a class="navbar-brand" href="/"><i class="fa fa-archive"></i> {{ SITE_NAME }}</a>
     </div>
 
@@ -86,10 +80,10 @@
                 </li>
             {% endif %}
             {% if perms.network.read_ipaddress and not perms.mail.read_mailtemplate and not users.read_user %}
-                <li><a href="{% url 'ipaddress-list' %}">{% trans "IP-Addresses" %}</a></li>{% endif %}
+                <li><a class="nav-item dropdown" href="{% url 'ipaddress-list' %}">{% trans "IP-Addresses" %}</a></li>{% endif %}
         </ul>
 
-        <ul class="navbar-nav col-7">
+        <ul class="navbar-nav ml-auto">
             {% if user.is_authenticated %}
                 {% if perms.devices.read_device %}
                     <li class="nav-item">
@@ -125,7 +119,7 @@
                         </form>
                     </li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'search' %}">{% trans "Advanced Search" %}</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'search' %}">{% trans "Search" %}</a>
+                    <!--<li class="nav-item"><a class="nav-link" href="{% url 'search' %}">{% trans "Search" %}</a>-->
                     </li>
                 {% endif %}
                 <li class="nav-item dropdown"><a href="#" data-toggle="dropdown"
@@ -156,14 +150,14 @@
 </nav>
 {% endif %}
 <div class="container">
-    <div class="mt-5">
-        <h1 style="font-size:1.7em">
+    <div class="mt-5 mr-auto">
+        <h1 style="font-size:1.5em">
             <ol class="breadcrumb">
                 {% for crumb in breadcrumbs %}
                     {% if forloop.last %}
                         <li class="breadcrumb-item active">{{ crumb.1 }}</li>
                     {% else %}
-                        <li><a class="breadcrumb-item" href="{{ crumb.0 }}">{{ crumb.1 }}</a></li>
+                        <li class="breadcrumb-item"><a href="{{ crumb.0 }}">{{ crumb.1 }}</a></li>
                     {% endif %}
                 {% endfor %}
                 {% if not nochrome %}

@@ -112,27 +112,27 @@ class SearchForm(forms.Form):
     searchname = forms.CharField(
         widget=forms.TextInput(attrs={"placeholder": "Search name", "class": "form-control input-sm"}), required=False)
     namemodifier = forms.ChoiceField(choices=CHARMODIFIER,
-                                     widget=forms.Select(attrs={"class": "form-control input-sm"}))
+                                     widget=forms.Select(attrs={"class": "form-control form-control-sm"}))
 
     inventorynumber = forms.CharField(
-        widget=forms.TextInput(attrs={"placeholder": "Search inventorynumber", "class": "form-control input-sm"}),
+        widget=forms.TextInput(attrs={"placeholder": "Search inventorynumber", "class": "form-control form-control-sm"}),
         required=False)
     inventorynumbermodifier = forms.ChoiceField(choices=CHARMODIFIER,
-                                                widget=forms.Select(attrs={"class": "form-control input-sm"}),
+                                                widget=forms.Select(attrs={"class": "form-control form-control-sm"}),
                                                 required=False)
 
     serialnumber = forms.CharField(
-        widget=forms.TextInput(attrs={"placeholder": "Search serialnumber", "class": "form-control input-sm"}),
+        widget=forms.TextInput(attrs={"placeholder": "Search serialnumber", "class": "form-control form-control-sm"}),
         required=False)
     serialnumbermodifier = forms.ChoiceField(choices=CHARMODIFIER,
-                                             widget=forms.Select(attrs={"class": "form-control input-sm"}),
+                                             widget=forms.Select(attrs={"class": "form-control form-control-sm"}),
                                              required=False)
 
     macaddress = forms.CharField(
-        widget=forms.TextInput(attrs={"placeholder": "Search MAC-Address", "class": "form-control input-sm"}),
+        widget=forms.TextInput(attrs={"placeholder": "Search MAC-Address", "class": "form-control form-control-sm"}),
         required=False)
     macaddressmodifier = forms.ChoiceField(choices=CHARMODIFIER,
-                                           widget=forms.Select(attrs={"class": "form-control input-sm"}),
+                                           widget=forms.Select(attrs={"class": "form-control form-control-sm"}),
                                            required=False)
 
     devicetype = forms.ModelMultipleChoiceField(Type.objects.all(), required=False,
@@ -144,7 +144,7 @@ class SearchForm(forms.Form):
     room = forms.ModelMultipleChoiceField(Room.objects.all(), required=False,
                                           widget=forms.SelectMultiple(attrs={"style": "width:100%;"}))
     ipaddress = forms.CharField(
-        widget=forms.TextInput(attrs={"placeholder": "Search IP-Address", "class": "form-control input-sm"}),
+        widget=forms.TextInput(attrs={"placeholder": "Search IP-Address", "class": "form-control form-control-sm"}),
         required=False)
     overdue = forms.ChoiceField(choices=(('b', 'both'), ('y', 'Yes'), ('n', 'No'),), required=False,
                                 widget=forms.Select(attrs={"style": "width:100%;"}))
@@ -152,7 +152,7 @@ class SearchForm(forms.Form):
     viewfilter = forms.ChoiceField(choices=VIEWFILTER, required=False,
                                    widget=forms.Select(attrs={"style": "width:100%;"}))
     lender = forms.CharField(
-        widget=forms.TextInput(attrs={"placeholder": "Search Lender", "class": "form-control input-sm"}),
+        widget=forms.TextInput(attrs={"placeholder": "Search Lender", "class": "form-control form-control-sm"}),
         required=False)
 
 
@@ -162,7 +162,7 @@ class LendForm(forms.Form):
                                    label=_("Lent to"))
     device = forms.ModelChoiceField(Device.objects.all(), widget=forms.Select(attrs={"style": "width:100%;"}),
                                     label=_("Device"), required=False)
-    smalldevice = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control input-sm"}), required=False)
+    smalldevice = forms.CharField(widget=forms.TextInput(attrs={"class": "form-control form-control-sm"}), required=False)
     duedate = forms.DateField(required=False, input_formats=('%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y',
                                                              '%b %d, %Y', '%d %b %Y', '%d %b, %Y', '%B %d %Y',
                                                              '%B %d, %Y', '%d %B %Y', '%d %B, %Y', '%d.%m.%Y',
@@ -195,45 +195,45 @@ class ReturnForm(forms.Form):
 class DeviceViewForm(forms.Form):
     viewfilter = forms.ChoiceField(choices=VIEWFILTER,
                                    widget=forms.Select(attrs={"style": "width:150px;margin-left:10px;",
-                                                              "class": "pull-right form-control input-sm"}))
+                                                              "class": "float-right form-control form-control-sm"}))
     viewsorting = forms.ChoiceField(choices=VIEWSORTING_DEVICES,
                                     widget=forms.Select(attrs={"style": "width:150px;margin-left:10px;",
-                                                               "class": "pull-right form-control input-sm"}))
+                                                               "class": "float-right form-control form-control-sm"}))
     departmentfilter = forms.ChoiceField(choices=get_department_options(),
                                     widget=forms.Select(attrs={"style": "width:150px;margin-left:10px;",
-                                                               "class": "pull-right form-control input-sm"}))
+                                                               "class": "float-right form-control form-control-sm"}))
 
 
 class ViewForm(forms.Form):
     viewsorting = forms.ChoiceField(choices=VIEWSORTING,
                                     widget=forms.Select(attrs={"style": "width:150px;margin-left:10px;",
-                                                               "class": "pull-right form-control input-sm"}))
+                                                               "class": "float-right form-control form-control-sm"}))
 
 
 class DepartmentViewForm(ViewForm):
     viewfilter = forms.ChoiceField(choices=VIEWFILTER,
                                    widget=forms.Select(attrs={"style": "width:200px;margin-left:10px;",
-                                                              "class": "pull-right input-sm form-control"}))
+                                                              "class": "float-right form-control-sm form-control"}))
     departmentfilter = forms.ChoiceField(choices=get_department_options(),
                                     widget=forms.Select(attrs={"style": "width:150px;margin-left:10px;",
-                                                               "class": "pull-right form-control input-sm"}))
+                                                               "class": "float-right form-control form-control-sm"}))
 
 class FilterForm(forms.Form):
     filterstring = forms.CharField(max_length=100,
                                    widget=forms.TextInput(attrs={"style": "width:150px;margin-left:10px;",
-                                                                 "class": "pull-right form-control input-sm",
+                                                                 "class": "float-right form-control form-control-sm",
                                                                  "placeholder": "Filter"}))
 
 
 class DepartmentFilterForm(FilterForm):
     departmentfilter = forms.ChoiceField(choices=get_department_options(),
                                     widget=forms.Select(attrs={"style": "width:150px;margin-left:10px;",
-                                                               "class": "pull-right form-control input-sm"}))
+                                                               "class": "float-right form-control form-control-sm"}))
 
 class DeviceGroupFilterForm(FilterForm):
     groupfilter = forms.ChoiceField(choices=get_devicegroup_options(),
                                          widget=forms.Select(attrs={"style": "width:150px;margin-left:10px;",
-                                                                        "class": "pull-right form-control input-sm"}))
+                                                                        "class": "float-right form-control form-control-sm"}))
 
 class DeviceForm(forms.ModelForm):
     error_css_class = 'has-error'
