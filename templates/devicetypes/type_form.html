@@ -7,26 +7,26 @@
 {% block header %}{{ actionstring }} {% if object != None %}{{ object }}{% else %}Object{% endif %}{% endblock %}
 {% block content %}
     <div class="row">
-        <div class="col-xs-12 col-md-6 col-md-offset-3 well well-lg">
-            <form action="" method="post" class="form-horizontal" id="forms">{% csrf_token %}
+        <div class="col-xs-12 col-md-6 offset-md-3 card p-4 bg-light">
+            <form action="" method="post" id="forms">{% csrf_token %}
                 {% for field in form %}
                     {% if field.html_name == "extra_fieldcount" %}
                         {{ field }}
                     {% else %}
-                        <div class="form-group {{ field.css_classes }}">
-                            <label for="{{ field.html_name }}" class="col-lg-4 control-label">
+                        <div class="form-group {{ field.css_classes }} row">
+                            <label for="{{ field.html_name }}" class="col-lg-4 col-form-label text-right pb-0">
                                 {{ field.label }}{% if field.field.required %}*{% endif %}</label>
 
                             <div class="col-lg-8">
                                 {{ field|add_class:'form-control' }}
-                                <p class="help-block">{% if field.errors %}{% for error in field.errors %}{{ error }},
+                                <p class="form-text">{% if field.errors %}{% for error in field.errors %}{{ error }},
                                 {% endfor %}{% endif %}</p>
                             </div>
                         </div>
                     {% endif %}
                 {% endfor %}
-                <input type="submit" value="{% trans "Submit" %}" class="btn btn-success pull-right"/>
-                <a href="#" id="newattribute" class="btn btn-default">add new Attribute</a>
+                <input type="submit" value="{% trans 'Submit' %}" class="btn btn-success float-right"/>
+                <a href="#" id="newattribute" class="btn btn-secondary">add new Attribute</a>
             </form>
         </div>
     </div>
@@ -88,11 +88,11 @@
 
     $("#newattribute").click(function() {
     element =$('
-    <div class="form-group"><label class="col-lg-4 control-label">Extra Attribute</label>
+    <div class="form-group"><label class="col-lg-4 col-form-label">Extra Attribute</label>
 
         <div class="col-lg-7"><input class="extra_attribute form-control" type="text">
 
-            <p class="help-block">
+            <p class="form-text">
                 {% if field.errors %}{% for error in field.errors %}{{ error }}, {% endfor %}{% endif %}</p></div>
         <div class="col-lg-1"><a href="#" class="deleteattribute"><i class="fa fa-times"></i></a></div>
     </div>');
