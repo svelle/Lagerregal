@@ -26,7 +26,7 @@
                                                                                          style="margin-right:7px"></i>{% trans "Manage Pictures" %}
                     </a></li>
                 {% permission user has 'devices.change_device' of device %}
-                    <li><a class="dropdown-item" href="{% url "device-inventoried" device.id %}"><i class="fa fa-check"
+                    <li><a class="dropdown-item" href="{% url 'device-inventoried' device.id %}"><i class="fa fa-check"
                                                                               style="margin-right:7px"></i>{% trans "Inventoried" %}
                 </a></li>{% endpermission %}
                 {% permission user has 'devices.add_device' of device %}

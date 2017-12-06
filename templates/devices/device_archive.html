@@ -11,9 +11,9 @@
             <div class="alert alert-danger">Do you really want to {% if object.archived != None %}un{% endif %}archive
                 the {% get_verbose_name object %}: {{ object }}?
             </div>
-            <form action="" method="post" class="form-horizontal">{% csrf_token %}
+            <form action="" method="post">{% csrf_token %}
                 <a href="{{ object.get_absolute_url }}" class="btn btn-sm btn-danger"
-                   style="margin-right:10px;">{% trans "No" %}</a><input type="submit" value="{% trans "Yes" %}"
+                   style="margin-right:10px;">{% trans "No" %}</a><input type="submit" value="{% trans 'Yes' %}"
                                                                          class="btn btn-sm btn-success"/>
             </form>
 

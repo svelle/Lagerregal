@@ -65,7 +65,7 @@
                             </tr>
                             <tr>
                                 <td>{% trans "Last Login" %}</td>
-                                <td><span title="{{ profileuser.last_login|date:"c" }}"
+                                <td><span title="{{ profileuser.last_login|date:'c' }}"
                                           class="profile-date">{{ profileuser.last_login }}</span></td>
                             </tr>
                             <tr>
@@ -138,8 +138,8 @@
                                     {% else %}
                                 <td>{{ lending.smalldevice }}
                             {% endif %}
-                            <a href="{% url "device-return" lending.pk %}" class="pull-right"
-                               title="{% trans "Mark as returned" %}"><i class="fa fa-reply"></i></a></td>
+                            <a href="{% url 'device-return' lending.pk %}" class="float-right"
+                               title="{% trans 'Mark as returned' %}"><i class="fa fa-reply"></i></a></td>
                             <td>{{ lending.lenddate }}</td>
                             <td>{{ lending.duedate }}{% if lending.duedate < weekago %}<span class="error-icon">!</span>
                                 {% elif lending.duedate < today %}<span class="warning-icon">!</span>
@@ -212,7 +212,7 @@
                           style="margin:0px;">{% csrf_token %}
                         {{ ipaddressform.ipaddresses }}
                         <div class="row" style="margin-top:10px; margin-left:0px; margin-right:0px;">
-                            <button type="submit" class="btn btn-success btn-sm pull-right disabled"
+                            <button type="submit" class="btn btn-success btn-sm float-right disabled"
                                     id="submitipaddress"><i class="fa fa-plus"></i> {% trans "Assign Addresses" %}
                             </button>
                         </div>
@@ -242,7 +242,7 @@
                                         <a href="{% url 'device-detail' action.object_id %}">{{ action.field_dict.name }}</a>
                                     </td>
                                     <td>
-                                        <a href="{%  url "history-detail" action.pk %}">{{ action.revision.date_created }}</a>
+                                        <a href="{%  url 'history-detail' action.pk %}">{{ action.revision.date_created }}</a>
                                     </td>
                                     <td>{{ action.revision.comment|linebreaksbr|default:"" }}</td>
                                 </tr>
@@ -264,7 +264,7 @@
 {% endblock %}
 
 {% block htmlend %}
-    <script type="text/javascript" language="javascript" src="{% static "js/jquery.dataTables.min.js" %}"></script>
+    <script type="text/javascript" language="javascript" src="{% static 'js/jquery.dataTables.min.js" %}'></script>
 {% endblock %}
 
 {% block scriptend %}

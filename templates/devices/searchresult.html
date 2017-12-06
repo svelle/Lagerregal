@@ -2,7 +2,7 @@
 <form method="POST" action="{%  url "ajax-search" %}" id="exportform">{% csrf_token %}
     <input type="hidden" name="search" id="export-searchrequest" />
     <input type="hidden" name="format" value="csv" />
-    <button class="btn btn-default btn-sm pull-right" id="exportbutton"><i class="fa fa-download"></i>  Export as CSV</button>
+    <button class="btn btn-secondary btn-sm float-right" id="exportbutton"><i class="fa fa-download"></i>  Export as CSV</button>
 </form>
 <table id="devicetable" class="table table-bordered table-striped">
     <thead>

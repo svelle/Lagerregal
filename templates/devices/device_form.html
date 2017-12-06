@@ -5,8 +5,8 @@
 {% block title %}{{ actionstring }} {% if object != None %}{{ object }}{% else %}Object{% endif %}{% endblock %}
 
 {% block extracss %}
-    <link rel="stylesheet" type="text/css" href="{% static "css/tagit.ui-zendesk.css" %}">
-    <link href="{% static "css/jquery.tagit.css" %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/tagit.ui-zendesk.css' %}">
+    <link href="{% static 'css/jquery.tagit.css' %}" rel="stylesheet" type="text/css">
 {% endblock %}
 
 {% block header %}{{ actionstring }} {% if object != None %}{{ object }}{% else %}Object{% endif %}{% endblock %}
@@ -77,7 +77,7 @@
 {% endblock %}
 
 {% block htmlend %}
-    <script src="{% static "js/tag-it.min.js" %}" type="text/javascript" charset="utf-8"></script>
+    <script src="{% static 'js/tag-it.min.js' %}" type="text/javascript" charset="utf-8"></script>
 {% endblock %}
 
 {% block scriptend %}
@@ -101,7 +101,7 @@
     $("#extra_attributes").empty();
     if (data != "") {
     $.each(data, function(index, value) {
-    $("#extra_attributes").append('<div class="form-group"><label for="id_attribute_' + value.id + '" class="col-lg-3 control-label">' + value.name +
+    $("#extra_attributes").append('<div class="form-group"><label for="id_attribute_' + value.id + '" class="col-lg-3 col-form-label">' + value.name +
         '</label><div class="col-lg-9"><input type="text" id="id_attribute_' + value.id + '" name="attribute_' + value.id + '" class="form-control"/></div></div>')
     });
     }

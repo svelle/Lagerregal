@@ -10,21 +10,21 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-xs-12 col-md-6 col-md-offset-3 well well-lg">
-            <form method="post" class="form-horizontal">{% csrf_token %}
+        <div class="col-xs-12 col-md-6 offset-md-3 well card-lg">
+            <form method="post">{% csrf_token %}
                 {% for field in form %}
                     <div class="form-group {{ field.css_classes }}">
-                        <label class="col-lg-4 control-label">
+                        <label class="col-lg-4 col-form-labelcontrol">
                             {{ field.label }}{% if field.field.required %}*{% endif %}</label>
 
                         <div class="col-lg-8">
                             {{ field|add_class:'form-control' }}
-                            <p class="help-block">{% if field.errors %}{% for error in field.errors %}{{ error }},
+                            <p class="form-text">{% if field.errors %}{% for error in field.errors %}{{ error }},
                             {% endfor %}{% endif %}</p>
                         </div>
                     </div>
                 {% endfor %}
-                <input type="submit" value="{% trans "Submit" %}" class="btn btn-success pull-right"/>
+                <input type="submit" value="{% trans 'Submit' %}" class="btn btn-success float-right"/>
             </form>
         </div>
     </div>

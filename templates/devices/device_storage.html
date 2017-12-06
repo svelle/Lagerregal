@@ -10,16 +10,16 @@
         <div class="small-12 large-6 large-centered columns">
             <div class="alert alert-danger">Do you really want to move the device to storage: {{ object }}?</div>
 
-            <form action="" method="post" class="form-horizontal">{% csrf_token %}
+            <form action="" method="post">{% csrf_token %}
                 <div class="form-group">
-                    <label for="inputPassword3" class="col-sm-2 control-label">Send room-changed email</label>
+                    <label for="inputPassword3" class="col-sm-2 col-form-label">Send room-changed email</label>
 
                     <div class="col-sm-10">
                         {{ form.send_mail|add_class:"form-control" }}
                     </div>
                 </div>
                 <a href="{{ object.get_absolute_url }}" class="btn btn-sm btn-danger"
-                   style="margin-right:10px;">{% trans "Cancel" %}</a><input type="submit" value="{% trans "Submit" %}"
+                   style="margin-right:10px;">{% trans "Cancel" %}</a><input type="submit" value="{% trans 'Submit' %}"
                                                                              class="btn btn-sm btn-success"/>
             </form>
 

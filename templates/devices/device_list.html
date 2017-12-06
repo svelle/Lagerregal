@@ -16,7 +16,6 @@
                                                                                style="margin-right:7px"></i>{% trans "Add Device" %}
             </a>
             <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
-                <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
                 <li class="dropdown-header">{% trans "From Template" %}</li>
@@ -25,12 +24,12 @@
                 {% if template_list %}
                     <li class="dropdown-divider"></li>
                     {% for template in template_list %}
-                        <li><a href="{% url 'device-add' template.pk %}">{{ template.templatename }}</a></li>
+                        <li><a class="dropdown-item" href="{% url 'device-add' template.pk %}">{{ template.templatename }}</a></li>
                     {% endfor %}
                 {% endif %}
                 <li class="dropdown-divider"></li>
                 {% if perms.devices.create_template %}
-                    <li><a class="dropdown-item" href="{% url 'template-add' %}">{% trans "New Template" %}</a></li>{% endif %}
+                    <li><a class="dropdown-item" class="dropdown-item" href="{% url 'template-add' %}">{% trans "New Template" %}</a></li>{% endif %}
             </ul>
         </div>
     {% endif %}
@@ -59,7 +58,7 @@
             {% for lending in device_list %}
             <tr {% if lending.duedate < today.date %}class="text-danger"{% endif %}>
                     {% if lending.smalldevice %}
-                        <td><a href="{% url "userprofile" lending.owner__id %}#devices">
+                        <td><a href="{% url 'userprofile' lending.owner__id %}#devices">
                             {{ lending.smalldevice }}
                         </a></td>
                     {% else %}
