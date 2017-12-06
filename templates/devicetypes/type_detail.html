@@ -18,14 +18,14 @@
     {% if perms.devicetypes.change_type %}
         <a href="{{ object.get_edit_url }}" class="btn btn-primary btn-sm float-right" style="margin-left:10px">
         <i class="fa fa-pencil" style="margin-right:7px"></i>{% trans "Edit" %}</a>
-        <a href="#" class="button right small dropdown" data-dropdown="mergedropdown"></a>
+        <a href="#" class="button small dropdown" data-dropdown="mergedropdown"></a>
         <div class="btn-group">
             <button type="button" class="btn btn-success btn-sm dropdown-toggle" data-toggle="dropdown">
-                <i class="fa fa-share" style="margin-right:7px"></i>{% trans "Merge" %} <span class="caret"></span>
+                <i class="fa fa-share" style="margin-right:7px"></i>{% trans "Merge" %}
             </button>
             <ul class="dropdown-menu" role="menu">
                 {% for merge in merge_list %}
-                    <li><a href="{% url 'type-merge' object.pk merge.pk %}">{{ merge.name }}</a></li>
+                    <li><a class="dropdown-item" href="{% url 'type-merge' object.pk merge.pk %}">{{ merge.name }}</a></li>
                 {% endfor %}
             </ul>
         </div>
@@ -114,9 +114,9 @@
         html: 'true',
         placement: "bottom",
         title : '<span class="text-info" style="margin-right:10px"><strong>{% trans "are you sure?" %}</strong></span>',
-        content :"<form action='{% url "type-delete" object.id %}' method='post' class='form-horizontal'>{% csrf_token %}"+
-            "<button type='button' class='btn btn-default'onclick='$(&quot;#deletebutton&quot;).popover(&quot;hide&quot;);'>{% trans "No" %}</button>"+
-            "<input type='submit' value='{% trans "Yes" %}' class='btn btn-danger pull-right'/>"+
+        content :"<form action='{% url "type-delete" object.id %}' method='post'>{% csrf_token %}"+
+            "<button type='button' class='btn btn-secondary' onclick='$(&quot;#deletebutton&quot;).popover(&quot;hide&quot;);'>{% trans "No" %}</button>"+
+            "<input type='submit' value='{% trans "Yes" %}' class='btn btn-danger float-right'/>"+
             "</form>"
         })
     {% endif %}
