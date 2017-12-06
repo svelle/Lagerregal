@@ -12,40 +12,40 @@
 
 {% block pullright %}
     {% if device.archived == None and device.trashed == None %}
-        <div class="btn-group pull-right" style="margin-left:10px">
-            <button type="button" class="btn btn-default dropdown-toggle btn-sm" data-toggle="dropdown">
+        <div class="btn-group float-right" style="margin-left:10px">
+            <button type="button" class="btn btn-secondary dropdown-toggle btn-sm" data-toggle="dropdown">
                 {% trans "Manage" %} <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" role="menu">
                 {% if display_printbutton %}
-                    <li><a href="#" data-target="#printDymoModal" data-toggle="modal"><i class="fa fa-print"
+                    <li><a class="dropdown-item" href="#" data-target="#printDymoModal" data-toggle="modal"><i class="fa fa-print"
                                                                                          style="margin-right:7px"></i>{% trans "Print Label" %}
                     </a></li>
                 {% endif %}
-                    <li><a href="#" data-target="#pictureModal" data-toggle="modal"><i class="fa fa-picture-o"
+                    <li><a class="dropdown-item" href="#" data-target="#pictureModal" data-toggle="modal"><i class="fa fa-picture-o"
                                                                                          style="margin-right:7px"></i>{% trans "Manage Pictures" %}
                     </a></li>
                 {% permission user has 'devices.change_device' of device %}
-                    <li><a href="{% url "device-inventoried" device.id %}"><i class="fa fa-check"
+                    <li><a class="dropdown-item" href="{% url "device-inventoried" device.id %}"><i class="fa fa-check"
                                                                               style="margin-right:7px"></i>{% trans "Inventoried" %}
                 </a></li>{% endpermission %}
                 {% permission user has 'devices.add_device' of device %}
-                    <li><a href="{% url 'device-add-copy' device.id %}"><i class="fa fa-copy"
+                    <li><a class="dropdown-item" href="{% url 'device-add-copy' device.id %}"><i class="fa fa-copy"
                                                                            style="margin-right:7px"></i>{% trans "Create Copy" %}
                 </a></li>{% endpermission %}
                 {% permission user has 'devices.change_device' of device or user has 'devices.delete_device' of device %}
-                    <li class="divider"></li>{% endpermission %}
+                    <li class="dropdown-divider"></li>{% endpermission %}
                 {% permission user has 'devices.change_device' of device %}
-                    <li><a href="#" id="storagebutton" data-toggle="popover" class="dropdown-cancel"><i
+                    <li><a class="dropdown-item" href="#" id="storagebutton" data-toggle="popover" class="dropdown-cancel"><i
                             class="fa fa-folder" style="margin-right:7px"></i>{% trans "Move to storage" %}</a></li>
-                    <li><a href="#" id="archivebutton" data-toggle="popover" class="dropdown-cancel"><i
+                    <li><a class="dropdown-item" href="#" id="archivebutton" data-toggle="popover" class="dropdown-cancel"><i
                             class="fa fa-folder" style="margin-right:7px"></i>{% trans "Archive" %}</a></li>
-                    <li><a href="#" id="trashbutton" data-toggle="popover" class="dropdown-cancel"><i
+                    <li><a class="dropdown-item" href="#" id="trashbutton" data-toggle="popover" class="dropdown-cancel"><i
                             class="fa fa-trash-o" style="margin-right:7px"></i>{% trans "Trash" %}</a></li>
                 {% endpermission %}
                 {% permission user has 'devices.change_device' of device %}
                     <li>
-                    <a href="#" id="deletebutton" data-toggle="popover" class="dropdown-cancel"><i class="fa fa-times"
+                    <a class="dropdown-item" href="#" id="deletebutton" data-toggle="popover" class="dropdown-cancel"><i class="fa fa-times"
                                                                                                    style="margin-right:7px"></i>{% trans "Delete" %}
                     </a></li>{% endpermission %}
             </ul>
@@ -54,7 +54,7 @@
 
         {% permission user has 'devices.change_device' of device %}
             <form action='{% url "device-bookmark" object.id %}' method='post'
-                  class='form-inline pull-right'>{% csrf_token %}
+                  class='form-inline float-right'>{% csrf_token %}
                 {% with is_bookmarked=device|check_bookmark:user %}
                     {% if is_bookmarked %}
                         <button type='submit' class='btn btn-success btn-sm' style='margin-left:10px;'><i
@@ -66,21 +66,21 @@
                     {% endif %}
                 {% endwith %}
             </form>
-            <a href="{% url 'device-edit' device.id %}" class="btn btn-primary pull-right btn-sm"
+            <a href="{% url 'device-edit' device.id %}" class="btn btn-primary float-right btn-sm"
                style="margin-left:10px"><i class="fa fa-pencil" style="margin-right:7px"></i>{% trans "Edit" %}</a>
         {% endpermission %}
         {% permission user has 'devices.lend_device' of device %}
-            <a href="#" class="btn btn-primary pull-right btn-sm" style="margin-left:10px" data-target="#mailModal"
+            <a href="#" class="btn btn-primary float-right btn-sm" style="margin-left:10px" data-target="#mailModal"
                data-toggle="modal"><i class="fa fa-envelope" style="margin-right:7px"></i>{% trans "Send Mail" %}</a>
         {% endpermission %}
 
         {% permission user has 'devices.lend_device' of device %}
             {% if device.currentlending != None %}
-                <a href="#" data-target="#returnModal" data-toggle="modal" class="btn btn-success pull-right btn-sm"
+                <a href="#" data-target="#returnModal" data-toggle="modal" class="btn btn-success float-right btn-sm"
                    style="margin-left:10px"><i class="fa fa-check" style="margin-right:7px"></i>{% trans "returned" %}
                 </a>
             {% else %}
-                <a href="#" data-target="#lendModal" data-toggle="modal" class="btn btn-success pull-right btn-sm"
+                <a href="#" data-target="#lendModal" data-toggle="modal" class="btn btn-success float-right btn-sm"
                    style="margin-left:10px"><i class="fa fa-check" style="margin-right:7px"></i>{% trans "Lend" %}</a>
             {% endif %}
         {% endpermission %}
@@ -88,12 +88,12 @@
 
 
         {% permission user has 'devices.change_device' of device and device.archived != None %}
-            <a href="#" id="archivebutton" data-toggle="popover" class="btn btn-success pull-right btn-sm"
+            <a href="#" id="archivebutton" data-toggle="popover" class="btn btn-success float-right btn-sm"
                style="margin-left:10px"><i class="fa fa-folder-open"
                                            style="margin-right:7px"></i>{% trans "Unarchive" %}</a>{% endpermission %}
 
         {% permission user has 'devices.change_device' of device and device.trashed != None %}
-            <a href="#" id="trashbutton" data-toggle="popover" class="btn btn-success pull-right btn-sm"
+            <a href="#" id="trashbutton" data-toggle="popover" class="btn btn-success float-right btn-sm"
                style="margin-left:10px"><i class="fa fa-folder-open"
                                            style="margin-right:7px"></i>{% trans "Remove from Trash" %}</a>{% endpermission %}
     {% endif %}
@@ -257,29 +257,29 @@
             {% endif %}
         </div>
         <div class="col-xs-12 col-md-3">
-            <div class="panel panel-primary">
-                <div class="panel-heading">{% trans "IP-Addresses" %}</div>
+            <div class="card bg-primary">
+                <div class="card-header">{% trans "IP-Addresses" %}</div>
                 <ul class="list-group">
                     {% for address in device.ipaddress_set.all %}
                         <li class="list-group-item ipaddress-list">
-                            <a href="{% url "ipaddress-detail" address.pk %}">{{ address.address }}</a> <a
+                            <a href="{% url 'ipaddress-detail' address.pk %}">{{ address.address }}</a> <a
                                 href="{% url 'device-ipaddress-remove' device.pk address.pk %}"
                                 class="close delete right"><i class="fa fa-times"></i></a> <a
                                 href="{% url 'device-ipaddress-purpose' device.pk address.pk %}"
                                 class="close delete right" style="margin-right:5px"><i class="fa fa-pencil"></i></a>
                             <br/>
-                            <small style="margin-top:0;color:#999">{{ address.purpose|default:"" }}</small>
+                            <small class="mt-0" style="color:#999">{{ address.purpose|default:"" }}</small>
                         </li>
                     {% endfor %}
                 </ul>
 
                 {% permission user has 'devices.change_device' of device and device.archived == None%}
-                    <div class="panel-footer">
+                    <div class="card-footer">
                         <form method="post" action="{% url 'device-ipaddress' device.pk %}"
-                              style="margin:0;">{% csrf_token %}
+                              class="m-0">{% csrf_token %}
                             {{ ipaddressform.ipaddresses }}
                             <div class="row" style="margin-top:10px; margin-left:0; margin-right:0;">
-                                <button type="submit" class="btn btn-success btn-sm pull-right disabled"
+                                <button type="submit" class="btn btn-success btn-sm float-right disabled"
                                         id="submitipaddress"><i class="fa fa-plus"></i> {% trans "Assign Addresses" %}
                                 </button>
                             </div>
@@ -290,8 +290,8 @@
             </div>
 
 
-            <div class="panel panel-primary">
-                <div class="panel-heading">{% trans "Tags" %}</div>
+            <div class="card bg-primary">
+                <div class="card-header">{% trans "Tags" %}</div>
                 <ul class="list-group">
                     {% for tag in device.tags.all %}
                         <li class="list-group-item tag-list">{{ tag.name }} <a
@@ -300,11 +300,11 @@
                     {% endfor %}
                 </ul>
 
-                <div class="panel-footer">
+                <div class="card-footer">
                     <form method="post" action="{% url 'device-tags' device.pk %}" style="margin:0;">{% csrf_token %}
                         {{ tagform.tags }}
                         <div class="row" style="margin-top:10px; margin-left:0; margin-right:0;">
-                            <button type="submit" class="btn btn-success btn-sm pull-right disabled" id="submittags"><i
+                            <button type="submit" class="btn btn-success btn-sm float-right disabled" id="submittags"><i
                                     class="fa fa-plus"></i> {% trans "Assign Tags" %}</button>
                         </div>
                         <input type="hidden" name="device" value="{{ device.pk }}"/>

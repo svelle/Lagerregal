@@ -4,8 +4,8 @@
     {% if field.html_name == "classname" %}
         {{ field }}
     {% else %}
-        <div class="form-group {{ field.css_classes }}">
-            <label for="{{ field.html_name }}" class="col-lg-4 control-label">
+        <div class="form-group {{ field.css_classes }} row">
+            <label for="{{ field.html_name }}" class="col-lg-4 col-form-label">
                 {{ field.label }}{% if field.field.required %}*{% endif %}</label>
 
             <div class="col-lg-8">

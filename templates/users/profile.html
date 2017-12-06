@@ -12,23 +12,25 @@
 
 {% block content %}
     <div class="row">
-    <ul class="nav nav-tabs" id="myTab">
-        {% if perms.users.read_user %}
-            <li class="active"><a href="#about" data-toggle="tab" data-tab="about">About</a></li>
-            <li><a href="#devices" data-toggle="tab" data-tab="devices">Devices</a></li>
-        {% else %}
-            <li class="active"><a href="#devices" data-toggle="tab" data-tab="devices">Devices</a></li>
-        {% endif %}
-        <li><a href="#ipaddresses" data-toggle="tab" data-tab="edits">IP-Addresses</a></li>
-        {% if perms.users.read_user %}
-            <li><a href="#edits" data-toggle="tab" data-tab="edits">Edits</a></li>
-        {% endif %}
-    </ul>
+        <ul class="nav nav-tabs" id="myTab" style="width:100%;">
+            {% if perms.users.read_user %}
+                <li class="nav-item"><a class="nav-link active" href="#about" data-toggle="tab" data-tab="about">About</a></li>
+                <li class="nav-item"><a class="nav-link" href="#devices" data-toggle="tab" data-tab="devices">Devices</a></li>
+            {% else %}
+                <li class="nav-item"><a class="nav-link active" href="#devices" data-toggle="tab" data-tab="devices">Devices</a></li>
+            {% endif %}
+            <li class="nav-item"><a class="nav-link" href="#ipaddresses" data-toggle="tab" data-tab="edits">IP-Addresses</a></li>
+            {% if perms.users.read_user %}
+                <li class="nav-item"><a class="nav-link" href="#edits" data-toggle="tab" data-tab="edits">Edits</a></li>
+            {% endif %}
+        </ul>
+    </div>
 
-    <div class="tab-content">
+    <div class="row">
+    <div class="tab-content" style="width:100%;">
         {% if perms.users.read_user %}
             <div class="tab-pane active" id="about">
-                <div data-spy="affix" data-offset-top="160" class="affix-container">
+                <div data-spy="affix" data-offset-top="160" class="affix-container position-fixed" >
                     {% if profileuser.avatar %}
                         <div class="col-sm-12 col-md-2" style="margin-top:20px">
                             <a data-toggle="modal" data-target="#avatarModal" class="thumbnail">
@@ -36,8 +38,8 @@
                             </a>
                         </div>
                     {% endif %}
-                    <div class="col-sm-12 col-md-5" style="margin-top:20px">
-                        <table class="table table-bordered">
+                    <div class="col-md-12" style="margin-top:20px">
+                        <table class="table table-bordered" style="margin-bottom:20px";>
                             <tr>
                                 <td>{% trans "Name" %}</td>
                                 <td>{{ profileuser.first_name }} {{ profileuser.last_name }}</td>
@@ -87,7 +89,7 @@
                         </table>
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-5 pull-right" style="margin-top:20px">
+                <div class="float-right" style="margin-top:20px">
                     <table class="table table-bordered">
                         <tr>
                             <th>{% trans "Permission" %}</th>
@@ -254,6 +256,7 @@
             </div>
         {% endif %}
         </div>
+    </div>
     </div>
     {% if perms.users.read_user and profileuser.avatar %}
         {% include "snippets/modals/avatarView.html" with modalname="avatarModal" avatarpath=profileuser.avatar.url %}
