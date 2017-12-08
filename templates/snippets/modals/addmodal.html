@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block modalBody %}
-    <form method="post" class="form-horizontal" id="addform">{% csrf_token %}
+    <form method="post" id="addform">{% csrf_token %}
         <div id="modal-form"></div>
         <input type="hidden" name="classname" id="addmodal_classname">
     </form>
 {% endblock %}
 
 {% block modalFooter %}
-    <button type="button" class="btn btn-default" data-dismiss="modal">{% trans "Cancel" %}</button>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">{% trans "Cancel" %}</button>
     <button type="button" class="btn btn-success" id="addbutton">{% trans "Create" %}</button>
 {% endblock %}

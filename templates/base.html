@@ -161,16 +161,14 @@
                     {% endif %}
                 {% endfor %}
                 {% if not nochrome %}
-                <small class="pull-right">{% block  pullright %}{% endblock %}</small>
+                <small class="ml-auto">{% block  pullright %}{% endblock %}</small>
                 {% endif %}
             </ol>
         </h1>
     </div>
-
     <div class="row">
         <div class="col-md-12">{% block content %}{% endblock %}</div>
     </div>
-
     <div id="footer">
         <div class="float-right">
             powered by <a href="https://github.com/viirus/Lagerregal">Lagerregal</a>
@@ -179,9 +177,9 @@
 </div>
 
 
-
 <script src="{% static "js/jquery.min.js" %}"></script>
 <script src="{% static "js/bootstrap.min.js" %}"></script>
+<script src="{% static "js/popper.min.js" %}"></script>
 <script src="{% static "js/select2.min.js" %}"></script>
 <script src="{% static "js/jquery-ui.min.js" type="text/javascript" %}"></script>
 <script type="text/javascript" src="{% static "js/noty/jquery.noty.js" %}"></script>

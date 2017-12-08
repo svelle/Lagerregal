@@ -257,11 +257,11 @@
             {% endif %}
         </div>
         <div class="col-xs-12 col-md-3">
-            <div class="card bg-primary">
+            <div class="card bg-primary mb-3">
                 <div class="card-header text-white">{% trans "IP-Addresses" %}</div>
                 <ul class="list-group">
                     {% for address in device.ipaddress_set.all %}
-                        <li class="list-group-item ipaddress-list">
+                        <li class="list-group-item ipaddress-list rounded-0 py-1">
                             <a href="{% url 'ipaddress-detail' address.pk %}">{{ address.address }}</a> <a
                                 href="{% url 'device-ipaddress-remove' device.pk address.pk %}"
                                 class="close delete right"><i class="fa fa-times"></i></a> <a
@@ -274,12 +274,12 @@
                 </ul>
 
                 {% permission user has 'devices.change_device' of device and device.archived == None%}
-                    <div class="card-footer">
+                    <div class="card-footer bg-light">
                         <form method="post" action="{% url 'device-ipaddress' device.pk %}"
                               class="m-0">{% csrf_token %}
                             {{ ipaddressform.ipaddresses }}
-                            <div class="row" style="margin-top:10px; margin-left:0; margin-right:0;">
-                                <button type="submit" class="btn btn-success btn-sm float-right disabled"
+                            <div class="row mx-0" style="margin-top:10px;">
+                                <button type="submit" class="btn btn-success btn-sm disabled"
                                         id="submitipaddress"><i class="fa fa-plus"></i> {% trans "Assign Addresses" %}
                                 </button>
                             </div>
@@ -294,17 +294,17 @@
                 <div class="card-header text-white">{% trans "Tags" %}</div>
                 <ul class="list-group">
                     {% for tag in device.tags.all %}
-                        <li class="list-group-item tag-list">{{ tag.name }} <a
+                        <li class="list-group-item tag-list py-1 rounded-0">{{ tag.name }} <a
                                 href="{% url 'device-tag-remove' device.pk tag.pk %}" class="close delete right"><i
                                 class="fa fa-times"></i></a></li>
                     {% endfor %}
                 </ul>
 
-                <div class="card-footer">
+                <div class="card-footer bg-light">
                     <form method="post" action="{% url 'device-tags' device.pk %}" style="margin:0;">{% csrf_token %}
                         {{ tagform.tags }}
-                        <div class="row" style="margin-top:10px; margin-left:0; margin-right:0;">
-                            <button type="submit" class="btn btn-success btn-sm float-right disabled" id="submittags"><i
+                        <div class="row mx-0" style="margin-top:10px;">
+                            <button type="submit" class="btn btn-success btn-sm disabled" id="submittags"><i
                                     class="fa fa-plus"></i> {% trans "Assign Tags" %}</button>
                         </div>
                         <input type="hidden" name="device" value="{{ device.pk }}"/>
