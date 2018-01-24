@@ -9,9 +9,9 @@
 
 {%  block paneltype %}
     {%  if overdue %}
-        panel-danger
+        bg-danger
     {% else %}
-        panel-primary
+        bg-primary
     {% endif %}
 {%  endblock %}
 
@@ -44,10 +44,13 @@
         {% endfor %}
         </tbody>
     </table>
-    <div class="panel-footer">
+    <div class="card-footer">
     {%  with dep=user.main_department|default:"all" %}
-        <a href="{% url 'device-list' department=dep filter='overdue' sorting='name' %}" class="pull-right">{% trans "More…" %}</a>
+        <small>
+            <a href="{% url 'device-list' department=dep filter='overdue' sorting='name' %}" class="pull-right">
+                {% trans "More…" %}
+            </a>
+        </small>
     {% endwith %}
-        <div class="clearfix"></div>
     </div>
 {% endblock %}
