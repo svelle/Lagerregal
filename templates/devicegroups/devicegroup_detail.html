@@ -60,7 +60,7 @@
 {% block scriptend %}
     {% if perms.devicegroups.delete_devicegroup %}
         $("#deletebutton").popover({
-        html: 'true',
+        html: true,
         placement: "bottom",
         title : '<span class="text-info" style="margin-right:10px"><strong>{% trans "are you sure?" %}</strong></span>',
         content :"<form action='{% url "devicegroup-delete" object.id %}' method='post'>{% csrf_token %}"+

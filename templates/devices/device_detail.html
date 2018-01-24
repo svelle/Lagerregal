@@ -533,7 +533,7 @@
 
     {% permission user has 'devices.delete_device' of device %}
         $("#deletebutton").popover({
-        html: 'true',
+        html: true,
         placement: "left",
         title : '<span class="text-info" style="margin-right:10px"><strong>{% trans "are you sure?" %}</strong></span>',
         content :"<form action='{% url "device-delete" object.id %}' method='post'>{% csrf_token %}"+
@@ -544,7 +544,7 @@
     {% endpermission %}
     {% permission user has 'devices.change_device' of device %}
         $("#archivebutton").popover({
-        html: 'true',
+        html: true,
         placement: "left",
         title : '<span class="text-info" style="margin-right:10px"><strong>{% trans "are you sure?" %}</strong></span>',
         content :"<form action='{% url "device-archive" object.id %}' method='post'>{% csrf_token %}"+
@@ -554,7 +554,7 @@
         })
 
         $("#storagebutton").popover({
-        html: 'true',
+        html: true,
         placement: "left",
         title : '<span class="text-info" style="margin-right:10px"><strong>{% trans "Are you sure?" %}</strong></span>',
         content :"<form action='{% url "device-storage" object.id %}' method='post'>{% csrf_token %}"+
@@ -566,7 +566,7 @@
         })
 
         $("#trashbutton").popover({
-        html: 'true',
+        html: true,
         placement: "left",
         title : '<span class="text-info" style="margin-right:10px"><strong>{% trans "are you sure?" %}</strong></span>',
         content :"<form action='{% url "device-trash" object.id %}' method='post'>{% csrf_token %}"+
