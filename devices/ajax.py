@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import json
-import urllib
-import httplib
-from httplib import ssl
+import urllib.request, urllib.parse, urllib.error
+import http.client
+from http.client import ssl
 
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -88,7 +88,7 @@ class AutocompleteName(View):
 
 class AddDeviceField(View):
     def post(self, request):
-        dform = QueryDict(query_string=unicode(request.POST["form"]).encode('utf-8'))
+        dform = QueryDict(query_string=str(request.POST["form"]).encode('utf-8'))
         classname = dform["classname"]
         if classname == "manufacturer":
             form = modelform_factory(Manufacturer, exclude=(), form=AddForm)(dform)
@@ -126,7 +126,7 @@ class AddDeviceField(View):
                 data["name"] = newitem.name
                 data["classname"] = classname
         else:
-            print form.errors
+            print(form.errors)
             data["error"] = "Error: {0}".format(form.non_field_errors())
         return HttpResponse(json.dumps(data), content_type='application/json')
 
@@ -203,7 +203,7 @@ class LoadMailtemplate(View):
             return HttpResponse("")
         template = get_object_or_404(MailTemplate, pk=template)
         data = {"subject": template.subject, "body": template.body}
-        if isinstance(recipients, unicode):
+        if isinstance(recipients, str):
             recipients = [recipients]
         newrecipients = [obj for obj in recipients]
         newrecipients += [obj.content_type.name[0].lower() + str(obj.object_id) for obj in
@@ -282,7 +282,7 @@ class AjaxSearch(View):
         searchvalues = ["id", "name", "inventorynumber", "serialnumber", "devicetype__name", "room__name",
                         "room__building__name", "currentlending__owner__username", "currentlending__owner__id"]
         for searchitem in search:
-            key, value = searchitem.items()[0]
+            key, value = list(searchitem.items())[0]
 
             if value[:4] == "not ":
                 value = value[4:]
@@ -494,19 +494,19 @@ class PuppetDetails(View):
 
     def post(self, request):
         searchvalue = request.POST["id"]
-        params = urllib.urlencode({'query': '["in", "certname",["extract", "certname",' +
+        params = urllib.parse.urlencode({'query': '["in", "certname",["extract", "certname",' +
                                             '["select_facts",["and",["=", "name","' +
                                             settings.PUPPETDB_SETTINGS['query_fact'] + '"],' +
                                             '["=","value","' + searchvalue + '"]]]]]'})
         context = ssl.create_default_context(cafile=settings.PUPPETDB_SETTINGS['cacert'])
         context.load_cert_chain(certfile=settings.PUPPETDB_SETTINGS['cert'],
                                 keyfile=settings.PUPPETDB_SETTINGS['key'])
-        conn = httplib.HTTPSConnection(settings.PUPPETDB_SETTINGS['host'],
+        conn = http.client.HTTPSConnection(settings.PUPPETDB_SETTINGS['host'],
                                        settings.PUPPETDB_SETTINGS['port'],
                                        context=context)
         conn.request("GET", settings.PUPPETDB_SETTINGS['req'] + params)
         res = conn.getresponse()
-        if res.status != httplib.OK:
+        if res.status != http.client.OK:
             return HttpResponse('Failed to fetch puppet details from ' +
                                 settings.PUPPETDB_SETTINGS['host'])
         context = {
@@ -521,20 +521,20 @@ class PuppetSoftware(View):
         software_fact = settings.PUPPETDB_SETTINGS['software_fact']
         query_fact = settings.PUPPETDB_SETTINGS['query_fact']
 
-        params = urllib.urlencode({'query': '["and", [ "=", "name", "' + software_fact + '"],' +
+        params = urllib.parse.urlencode({'query': '["and", [ "=", "name", "' + software_fact + '"],' +
                                             '["in", "certname",["extract", "certname",' +
                                             '["select_facts",["and",["=", "name","' + query_fact + '"],' +
                                             '["=","value","' + searchvalue + '"]]]]]]'})
         context = ssl.create_default_context(cafile=settings.PUPPETDB_SETTINGS['cacert'])
         context.load_cert_chain(certfile=settings.PUPPETDB_SETTINGS['cert'],
                                 keyfile=settings.PUPPETDB_SETTINGS['key'])
-        conn = httplib.HTTPSConnection(settings.PUPPETDB_SETTINGS['host'],
+        conn = http.client.HTTPSConnection(settings.PUPPETDB_SETTINGS['host'],
                                        settings.PUPPETDB_SETTINGS['port'],
                                        context=context)
         req = settings.PUPPETDB_SETTINGS['req'] + params
         conn.request("GET", settings.PUPPETDB_SETTINGS['req'] + params)
         res = conn.getresponse()
-        if res.status != httplib.OK:
+        if res.status != http.client.OK:
             return HttpResponse('Failed to fetch puppet details from ' +
                                 settings.PUPPETDB_SETTINGS['host'])
 
@@ -542,7 +542,7 @@ class PuppetSoftware(View):
             res = json.loads(res.read())[0]
             software = res['value']
             context = {
-                'puppetsoftware': software.values()
+                'puppetsoftware': list(software.values())
             }
         except:
             return HttpResponse('Malformed puppet software fact.')

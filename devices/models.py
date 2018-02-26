@@ -94,8 +94,8 @@ class Manufacturer(models.Model):
 
 
 class Bookmark(models.Model):
-    device = models.ForeignKey("Device")
-    user = models.ForeignKey(Lageruser)
+    device = models.ForeignKey("Device", on_delete=models.CASCADE)
+    user = models.ForeignKey(Lageruser, on_delete=models.CASCADE)
 
 
 class Device(models.Model):
@@ -192,8 +192,8 @@ class DeviceInformationType(models.Model):
 
 class DeviceInformation(models.Model):
     information = models.CharField(_('Information'), max_length=200)
-    device = models.ForeignKey(Device, related_name="information")
-    infotype = models.ForeignKey(DeviceInformationType)
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name="information")
+    infotype = models.ForeignKey(DeviceInformationType, on_delete=models.CASCADE)
 
     def __unicode__(self):
         return self.infotype.__unicode__() + ": " + self.information
@@ -214,7 +214,7 @@ class Lending(models.Model):
     duedate = models.DateField(blank=True, null=True)
     duedate_email = models.DateField(blank=True, null=True)
     returndate = models.DateField(blank=True, null=True)
-    device = models.ForeignKey(Device, null=True, blank=True)
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, null=True, blank=True)
     smalldevice = models.CharField(_("Small Device"), max_length=200, null=True, blank=True)
 
 
@@ -222,9 +222,9 @@ class Lending(models.Model):
 class Template(models.Model):
     templatename = models.CharField(_('Templatename'), max_length=200)
     name = models.CharField(_('Name'), max_length=200)
-    manufacturer = models.ForeignKey(Manufacturer, blank=True, null=True)
+    manufacturer = models.ForeignKey(Manufacturer, on_delete=models.CASCADE, blank=True, null=True)
     description = models.CharField(_('Description'), max_length=1000, blank=True)
-    devicetype = models.ForeignKey(Type, blank=True, null=True)
+    devicetype = models.ForeignKey(Type, on_delete=models.CASCADE, blank=True, null=True)
 
     def __unicode__(self):
         return self.templatename
@@ -250,7 +250,7 @@ class Template(models.Model):
 
 
 class Note(models.Model):
-    device = models.ForeignKey(Device, related_name="notes")
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name="notes")
     note = models.CharField(max_length=5000)
     creator = models.ForeignKey(Lageruser, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -264,7 +264,7 @@ class Note(models.Model):
 
 
 class Picture(models.Model):
-    device = models.ForeignKey(Device, related_name="pictures")
+    device = models.ForeignKey(Device, on_delete=models.CASCADE, related_name="pictures")
     image = models.ImageField(upload_to=utils.get_file_location)
     caption = models.CharField(max_length=200, null=True, blank=True)
 
