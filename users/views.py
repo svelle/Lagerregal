@@ -1,7 +1,7 @@
 from django.views.generic import DetailView, TemplateView, ListView, CreateView, UpdateView, DeleteView, FormView
 from reversion.models import Version
 from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.translation import ugettext_lazy as _
 from django.utils import translation
 from django.contrib import messages
@@ -17,7 +17,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.utils.http import is_safe_url
 from django.shortcuts import resolve_url
 from django.template.response import TemplateResponse
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from django.core.exceptions import PermissionDenied
 
 from users.models import Lageruser, Department, DepartmentUser

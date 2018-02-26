@@ -4,7 +4,7 @@ import os.path
 from django.test.client import Client, RequestFactory
 from django.test import TestCase
 from model_mommy import mommy
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 
 from mail.models import MailTemplate, MailTemplateRecipient, MailHistory

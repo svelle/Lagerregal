@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth.models import Group
 from django.shortcuts import get_object_or_404

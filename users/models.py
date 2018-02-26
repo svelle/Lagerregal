@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MaxValueValidator
 from django.conf import settings
 import pytz
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.dispatch import receiver
 from django_auth_ldap.backend import populate_user
 from django.conf import settings

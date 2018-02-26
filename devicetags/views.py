@@ -1,5 +1,5 @@
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, FormView
-from django.core.urlresolvers import reverse_lazy, reverse
+from django.urls import reverse_lazy, reverse
 from django.utils.translation import ugettext_lazy as _
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404

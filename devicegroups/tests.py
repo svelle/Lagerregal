@@ -4,7 +4,7 @@ import os.path
 from django.test.client import Client
 from django.test import TestCase
 from model_mommy import mommy
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 
 from devicegroups.models import Devicegroup
 from users.models import Lageruser
