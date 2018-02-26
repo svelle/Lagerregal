@@ -1,6 +1,7 @@
-import csv, codecs, cStringIO
+import csv, codecs
 import uuid
 from datetime import date, timedelta
+from io import StringIO
 from django.conf import settings
 from django.test.runner import DiscoverRunner
 
@@ -19,7 +20,7 @@ class UnicodeWriter:
 
     def __init__(self, f, dialect=csv.excel, encoding="utf-8", **kwds):
         # Redirect output to a queue
-        self.queue = cStringIO.StringIO()
+        self.queue = StringIO.StringIO()
         self.writer = csv.writer(self.queue, dialect=dialect, **kwds)
         self.stream = f
         self.encoder = codecs.getincrementalencoder(encoding)()
