@@ -9,7 +9,7 @@ from users.models import Department
 
 class Devicegroup(models.Model):
     name = models.CharField(max_length=200)
-    department = models.ForeignKey(Department, null=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True)
 
     def __unicode__(self):
         return self.name

@@ -24,7 +24,7 @@ class MailTemplate(models.Model):
     name = models.CharField(_('Name'), max_length=200, unique=True)
     subject = models.CharField(_('Subject'), max_length=500)
     body = models.CharField(_('Body'), max_length=10000)
-    department = models.ForeignKey(Department, null=True)
+    department = models.ForeignKey(Department, null=True, on_delete=models.CASCADE)
 
     usage = models.CharField(_('Usage'), choices=usages.items(), null=True, blank=True, max_length=200)
 
@@ -100,8 +100,8 @@ class MailTemplate(models.Model):
 
 
 class MailTemplateRecipient(models.Model):
-    mailtemplate = models.ForeignKey(MailTemplate, related_name='default_recipients')
-    content_type = models.ForeignKey(ContentType)
+    mailtemplate = models.ForeignKey(MailTemplate, related_name='default_recipients', on_delete=models.CASCADE)
+    content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
     object_id = models.PositiveIntegerField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
@@ -110,12 +110,12 @@ class MailTemplateRecipient(models.Model):
 
 
 class MailHistory(models.Model):
-    mailtemplate = models.ForeignKey(MailTemplate)
+    mailtemplate = models.ForeignKey(MailTemplate, on_delete=models.CASCADE)
     subject = models.CharField(_('Subject'), max_length=500)
     body = models.CharField(_('Body'), max_length=10000)
     sent_by = models.ForeignKey(Lageruser, null=True, on_delete=models.SET_NULL)
     sent_at = models.DateTimeField(auto_now_add=True)
-    device = models.ForeignKey("devices.Device", null=True)
+    device = models.ForeignKey("devices.Device", null=True, on_delete=models.CASCADE)
 
 
     def get_absolute_url(self):

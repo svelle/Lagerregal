@@ -25,7 +25,7 @@ class Type(models.Model):
 
 
 class TypeAttribute(models.Model):
-    devicetype = models.ForeignKey(Type)
+    devicetype = models.ForeignKey(Type, on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     regex = models.CharField(max_length=500, blank=True, null=True)
 
@@ -41,9 +41,9 @@ class TypeAttribute(models.Model):
 
 
 class TypeAttributeValue(models.Model):
-    typeattribute = models.ForeignKey(TypeAttribute)
+    typeattribute = models.ForeignKey(TypeAttribute, on_delete=models.CASCADE)
     value = models.CharField(max_length=400)
-    device = models.ForeignKey("devices.Device")
+    device = models.ForeignKey("devices.Device", on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _("Type-attribute value")
