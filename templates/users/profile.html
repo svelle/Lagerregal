@@ -132,7 +132,17 @@
                     {% for lending in lendings %}
                         <tr>
                             {% if lending.device.pk %}
-                                <td><a href="{% url 'device-detail' lending.device.pk %}">{{ lending.device.name }}</a>
+
+                                <td><div class="media">
+                                      <div class="media-left media-middle">
+                                        <a href="#">
+                                          <img class="media-object" src= {{lending.device.pictures.first.image.url}}>
+                                        </a>
+                                      </div>
+                                    <div class="media-body">
+                                      <a href="{% url 'device-detail' lending.device.pk %}">{{ lending.device.name }}</a>
+                                    </div>
+                                  </div>
                                     {% else %}
                                 <td>{{ lending.smalldevice }}
                             {% endif %}
