@@ -420,6 +420,9 @@ class DeviceCreate(CreateView):
         messages.success(self.request, _('Device was successfully created.'))
         return r
 
+@permission_required('devices.change_device', raise_exception=True)
+class DeviceBulkEdit(UpdateView):
+    model = Device
 
 @permission_required('devices.change_device', raise_exception=True)
 class DeviceUpdate(UpdateView):
