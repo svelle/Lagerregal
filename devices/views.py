@@ -423,6 +423,7 @@ class DeviceCreate(CreateView):
 @permission_required('devices.change_device', raise_exception=True)
 class DeviceBulkEdit(UpdateView):
     model = Device
+    template = 'devices/device_bulk_edit.html'
 
 @permission_required('devices.change_device', raise_exception=True)
 class DeviceUpdate(UpdateView):
