@@ -44,6 +44,7 @@ urlpatterns = [
     url(r'^devices/add$', DeviceCreate.as_view(), name="device-add"),
     url(r'^devices/add/template/(?P<templateid>[0-9]*)$', DeviceCreate.as_view(), name="device-add"),
     url(r'^devices/add/copy/(?P<copyid>[0-9]*)$', DeviceCreate.as_view(), name="device-add-copy"),
+    url(r'^devices/bulkedit/$', DeviceBulkEdit.as_view(), name='device-bulk-edit'),
     url(r'^devices/(?P<pk>[0-9]*)/$', DeviceDetail.as_view(), name="device-detail"),
     url(r'^devices/(?P<pk>[0-9]*)/edit/$', DeviceUpdate.as_view(), name="device-edit"),
     url(r'^devices/(?P<pk>[0-9]*)/delete/$', DeviceDelete.as_view(), name="device-delete"),
