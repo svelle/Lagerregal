@@ -514,6 +514,11 @@ class DeviceUpdate(UpdateView):
         return super(DeviceUpdate, self).form_valid(form)
 
 
+@permission_required('devices.change_device', raise_exception=True)
+class DeviceBulkEdit(UpdateView):
+    model = Device
+
+    
 @permission_required('devices.delete_device', raise_exception=True)
 class DeviceDelete(DeleteView):
     model = Device
