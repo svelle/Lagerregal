@@ -12,8 +12,8 @@
     {{ viewform.departmentfilter }}
     {% if perms.devices.add_device %}
         <div class="btn-group">
-          <a href="{% url 'device-bulk-edit' %}" class="btn btn-success btn-sm"><i class="fa fa-plus"
-                                                                           style="margin-right:7px"></i>{% trans "Edit Devices" %}
+            <a href="{% url 'device-bulk-edit' %}" class="btn btn-success btn-sm"><i class="fa fa-plus"
+                      style="margin-right:7px"></i>{% trans "Edit Devices" %}
             <a href="{% url 'device-add' %}" class="btn btn-success btn-sm"><i class="fa fa-plus"
                                                                                style="margin-right:7px"></i>{% trans "Add Device" %}
             </a>

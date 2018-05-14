@@ -421,11 +421,6 @@ class DeviceCreate(CreateView):
         return r
 
 @permission_required('devices.change_device', raise_exception=True)
-class DeviceBulkEdit(UpdateView):
-    model = Device
-    template = 'devices/device_bulk_edit.html'
-
-@permission_required('devices.change_device', raise_exception=True)
 class DeviceUpdate(UpdateView):
     model = Device
     template_name = 'devices/device_form.html'
