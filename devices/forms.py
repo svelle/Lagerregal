@@ -8,7 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.db.utils import OperationalError
 
 from network.models import IpAddress
-from devices.models import Device, Type, Room, Manufacturer
+from devices.models import Device, Type, Room, Manufacturer, Building
 from devicetypes.models import TypeAttribute, TypeAttributeValue
 from devicegroups.models import Devicegroup
 from users.models import Lageruser, Department
@@ -63,6 +63,14 @@ DEPARTMENT_OPTIONS = [
     ("my", _("My Departments"))
 ]
 
+BULK_EDIT_OPTIONS = [
+    ('room', _("Room")),
+    ('department', _("Department")),
+    ('building', _("Building")),
+    ('devicegroup', _("Devicegroup")),
+    ('contact', _("Contact")),
+    ('manufacturer', _("Manufacturer")),
+]
 
 def get_department_options():
     try:
@@ -375,4 +383,12 @@ class DeviceStorageForm(forms.Form):
 
 class DeviceBulkEditForm(forms.Form):
     error_css_class = 'has-error'
-    room = forms.ModelChoiceField(Room.objects.all())
+
+    changed = forms.MultipleChoiceField(choices = BULK_EDIT_OPTIONS)
+    devices = forms.ModelChoiceField(Device.objects.all())
+    # old_room = forms.ModelChoiceField(Room.objects.all(), label='New room', required=False)
+    # old_building = forms.ModelChoiceField(Building.objects.all(), label="New building", required=False)
+    # old_department = forms.ModelChoiceField(Department.objects.all(), label="New department", required=False)
+    # new_room = forms.ModelChoiceField(Room.objects.all(), label='New room', required=False)
+    # new_building = forms.ModelChoiceField(Building.objects.all(), label="New building", required=False)
+    # new_department = forms.ModelChoiceField(Department.objects.all(), label="New department", required=False)

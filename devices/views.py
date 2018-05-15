@@ -520,6 +520,10 @@ class DeviceBulkEdit(FormView):
     form_class = DeviceBulkEditForm
     template_name = 'devices/bulk_edit.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(DeviceBulkEdit, self).get_context_data(**kwargs)
+        context["breadcrumbs"] = [(reverse('device-list'), _("Devices")), ("", _("Bulk Edit"))]
+        return context
 
 @permission_required('devices.delete_device', raise_exception=True)
 class DeviceDelete(DeleteView):
