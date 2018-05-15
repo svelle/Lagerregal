@@ -372,3 +372,7 @@ class DeviceMailForm(forms.Form):
 class DeviceStorageForm(forms.Form):
     error_css_class = 'has-error'
     send_mail = forms.BooleanField(required=False)
+
+class DeviceBulkEditForm(forms.Form):
+    error_css_class = 'has-error'
+    room = forms.ModelChoiceField(Room.objects.all())

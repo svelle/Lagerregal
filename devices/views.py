@@ -30,7 +30,7 @@ from network.models import IpAddress
 from mail.models import MailTemplate, MailHistory
 from devices.forms import IpAddressForm, SearchForm, LendForm, DeviceViewForm, IpAddressPurposeForm
 from devices.forms import ViewForm, DeviceForm, DeviceMailForm, VIEWSORTING, VIEWSORTING_DEVICES, FilterForm, \
-    DeviceStorageForm, ReturnForm, DeviceGroupFilterForm
+    DeviceStorageForm, ReturnForm, DeviceGroupFilterForm, DeviceBulkEditForm
 from devicetags.forms import DeviceTagForm
 from users.models import Lageruser, Department
 from Lagerregal.utils import PaginationMixin
@@ -515,10 +515,12 @@ class DeviceUpdate(UpdateView):
 
 
 @permission_required('devices.change_device', raise_exception=True)
-class DeviceBulkEdit(UpdateView):
+class DeviceBulkEdit(FormView):
     model = Device
+    form_class = DeviceBulkEditForm
+    template_name = 'devices/bulk_edit.html'
 
-    
+
 @permission_required('devices.delete_device', raise_exception=True)
 class DeviceDelete(DeleteView):
     model = Device
