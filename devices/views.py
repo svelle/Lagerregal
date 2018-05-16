@@ -523,6 +523,7 @@ class DeviceBulkEdit(FormView):
     def get_context_data(self, **kwargs):
         context = super(DeviceBulkEdit, self).get_context_data(**kwargs)
         context["breadcrumbs"] = [(reverse('device-list'), _("Devices")), ("", _("Bulk Edit"))]
+        context['form_scripts'] = "$('#id_changed').select2();" #look at template to see how this is used!!
         return context
 
 @permission_required('devices.delete_device', raise_exception=True)
