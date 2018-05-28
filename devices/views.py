@@ -557,10 +557,14 @@ class DeviceLend(FormView):
 
     def get_form_kwargs(self):
         kwargs = super(DeviceLend, self).get_form_kwargs()
+        print self.request.POST
+        print("VIEW DEVICE")
         print(self.request.POST["device"])
+        print "VIEW KWARGS TYPE"
         print(type(kwargs))
-        kwargs['device'] = self.request.device
-        # kwargs.update({'device': self.request.device})
+        kwargs['device'] = self.request.POST["device"]
+        print("VIEW KWARGS")
+        print(kwargs)
         return kwargs
 
 
@@ -569,8 +573,6 @@ class DeviceLend(FormView):
         templates = []
         if form.cleaned_data["device"] and form.cleaned_data["device"] != "":
             device = form.cleaned_data["device"]
-            print("HEY!!!!")
-            print(device.currentlending)
             if device.archived is not None:
                 messages.error(self.request, _("Archived Devices can't be lent"))
                 return HttpResponseRedirect(reverse("device-detail", kwargs={"pk": device.pk}))

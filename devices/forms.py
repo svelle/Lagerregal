@@ -181,9 +181,16 @@ class LendForm(forms.Form):
         return cleaned_data
 
     def __init__(self, *args, **kwargs):
+        print "INITIAL FORM KWARGS"
+        print kwargs
         self.device = kwargs.pop('device', None)
         super(LendForm, self).__init__(*args, **kwargs)
+        print("FORM ARGS")
+        print(args)
+        print "FORM KWARGS!!"
         print kwargs
+        print("FORM DEVICE!!")
+        print self.device
         # device = kwargs.pop('device')
         # print(device)
 
