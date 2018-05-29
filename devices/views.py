@@ -565,6 +565,9 @@ class DeviceLend(FormView):
             if device.archived is not None:
                 messages.error(self.request, _("Archived Devices can't be lent"))
                 return HttpResponseRedirect(reverse("device-detail", kwargs={"pk": device.pk}))
+            new_owner = get_object_or_404(Lageruser, pk=form.cleaned_data["owner"].pk)
+            if new_owner.expiration_date < datetime.date.today():
+                return HttpResponseRedirect(reverse("device-lend"))
             try:
                 templates.append(MailTemplate.objects.get(usage = "lent", department = self.request.user.main_department))
             except:
